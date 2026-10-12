@@ -1,0 +1,138 @@
+\begin{theoremEnd}[normal,category=combinations]{corollary}[Signed combinations and their reductions]
+\CombinedResultCheck{cor:combinations}{corollary}\label{cor:combinations}
+Under the finite Gaussian model in \cref{sec:finite-model}, let
+$A\subseteq\{0,1,2\}$ be nonempty and fix signs
+$\varepsilon_r\in\{-1,1\}$ for $r\in A$.
+For $\theta(x)=\omega_1(x-c+L)$, $w(x)=\cos\theta(x)$, and
+$J=[w(x_+),w(x_-)]\subset(-1,1)$, define, for a coefficient array
+$\boldsymbol b=(b_0,\ldots,b_m)^T$,
+\[
+ \begin{aligned}
+ H_{0,\boldsymbol b}(w)
+   &=\sqrt L\,b_0+\sqrt{1-w^2}\sum_{j=1}^m b_jU_{j-1}(w),\\
+ H_{1,\boldsymbol b}(w)&=\sum_{j=1}^m jb_jT_j(w),&
+ H_{2,\boldsymbol b}(w)&=-\sum_{j=1}^m j^2b_jU_{j-1}(w).
+ \end{aligned}
+\]
+Suppose a fixed $\boldsymbol d=(d_0,\ldots,d_m)^T$ satisfies
+$\min_{w\in J}\varepsilon_rH_{r,\boldsymbol d}(w)>0$ for every
+$r\in A$. Set $h=d_0+\sum_{j=1}^m d_j\phi_{j,L}$ and choose
+$j_*\in\{0,\ldots,m\}$ with $d_{j_*}\ne0$. The coordinates
+\[
+ \gamma=\frac{a_{j_*}}{d_{j_*}},\qquad
+ g_j=a_j-d_j\gamma\quad(j\ne j_*),\qquad g_{j_*}=0
+\]
+give $\boldsymbol g=(g_j)_{j\ne j_*}\in\R^m$ and
+$f_{\boldsymbol g}=g_0+\sum_{j=1}^m g_j\phi_{j,L}$.
+Then $f_{\boldsymbol a}=f_{\boldsymbol g}+\gamma h$, with inverse
+$a_j=g_j+d_j\gamma$ for $0\leq j\leq m$.
+In expressions involving $H_{r,\boldsymbol g}$, the zero coordinate
+$g_{j_*}$ is included in the coefficient array.
+
+With $\eta_r$ from \cref{eq:joint-threshold}, define
+\[
+ \eta_r(x;\boldsymbol g)
+   =-\frac{H_{r,\boldsymbol g}(w(x))}{H_{r,\boldsymbol d}(w(x))},
+ \qquad M_r(\boldsymbol g)=\max_{x\in I}\eta_r(x;\boldsymbol g),
+ \qquad \eta_r^\pm(\boldsymbol g)=\eta_r(x_\pm;\boldsymbol g).
+\]
+For adjacent selected orders $r,r+1\in A$, let
+$E_r(\boldsymbol g)=\eta_r^-(\boldsymbol g)$ when
+$\varepsilon_r=\varepsilon_{r+1}$ and
+$E_r(\boldsymbol g)=\eta_r^+(\boldsymbol g)$ otherwise.
+Suppressing the argument $\boldsymbol g$ on the right, the threshold is
+\[
+ \tau_A^\varepsilon(\boldsymbol g)=
+ \begin{cases}
+ M_r, & A=\{r\},\\
+ \max\{M_1,E_0\}, & A=\{0,1\},\\
+ \max\{M_2,M_0\}, & A=\{0,2\},\ \varepsilon_0=\varepsilon_2,\\
+ \max\{M_2,\eta_0^-,\eta_0^+\},
+     & A=\{0,2\},\ \varepsilon_0\ne\varepsilon_2,\\
+ \max\{M_2,E_1\}, & A=\{1,2\},\\
+ \max\{M_2,E_1,E_0\}, & A=\{0,1,2\}.
+ \end{cases}
+\]
+\cref{prop:joint} applies with scalar coefficient
+$\gamma=a_{j_*}/d_{j_*}$. Thus
+$f_{\boldsymbol a}\in\mathcal C_A^\varepsilon$ exactly when
+$\gamma\geq\tau_A^\varepsilon(\boldsymbol g)$.
+
+Each maximum $M_r$ is attained at a physical endpoint or a location
+whose cosine coordinate is an interior root in $J$ of
+\[
+ H_{r,\boldsymbol d}(w)\frac{\mathrm{d}H_{r,\boldsymbol g}}{\mathrm{d}w}(w)
+ -H_{r,\boldsymbol g}(w)\frac{\mathrm{d}H_{r,\boldsymbol d}}{\mathrm{d}w}(w)=0.
+\]
+For $r=1,2$, the left side is a polynomial.
+All root multiplicities and reduced degrees are included.
+If the left side vanishes identically, the quotient is constant and
+either endpoint suffices.
+
+These formulas cover the 26 nonempty combinations without opposing
+signs, with positive ordinary posterior probability whenever the
+stated direction condition holds for the selected combination.
+The remaining 37 selections contain opposing signs. At orders zero,
+one, and two these force, respectively, a zero, constant, or affine
+function, subject to any further restrictions. In the finite
+expansion, affine curves are constant, so all 37 events have
+ordinary posterior probability zero.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{cor:combinations}
+Fix the selected orders, signs, and direction coefficients satisfying
+\cref{cor:combinations}. The inverse map follows by substitution, so
+the coordinates preserve the full coefficient space. The Chebyshev identities in
+\cref{def:chebyshev} give
+\[
+ \begin{aligned}
+ f_{\boldsymbol b}(x)&=\frac{H_{0,\boldsymbol b}(w(x))}{\sqrt L},\\
+ \frac{\mathrm{d}f_{\boldsymbol b}}{\mathrm{d}x}(x)
+    &=\frac{\omega_1}{\sqrt L}H_{1,\boldsymbol b}(w(x)),\\
+ \frac{\mathrm{d}^2f_{\boldsymbol b}}{\mathrm{d}x^2}(x)
+    &=\frac{\omega_1^2\sin\theta(x)}{\sqrt L}
+       H_{2,\boldsymbol b}(w(x)).
+ \end{aligned}
+\]
+Since $\sin\theta$ is positive on compact $I$, the assumed conditions
+on $H_{r,\boldsymbol d}$ give the uniform signed derivative bounds
+required by \cref{prop:joint}. The positive factors cancel from the
+ratios, yielding the displayed expression for $\eta_r$ and the
+conditioned posterior.
+
+A signed slope restriction makes the minimum of
+$\varepsilon_0 f_{\boldsymbol a}$ occur at $x_-$ when
+$\varepsilon_0=\varepsilon_1$, and at $x_+$ otherwise.
+This gives $E_0$. Applying the same argument to the signed slope
+$\varepsilon_1\frac{\mathrm{d}f_{\boldsymbol a}}{\mathrm{d}x}$
+under the curvature restriction gives $E_1$. When
+$\varepsilon_0\ne\varepsilon_2$, the signed curve
+$\varepsilon_0 f_{\boldsymbol a}$ is concave, so its nonnegativity
+is equivalent to nonnegative endpoint values by the chord inequality.
+When the signs agree, the signed curve is convex and its minimum may
+be interior, so the value restriction retains $M_0$. Together with
+the continuum slope and curvature bounds $M_1$ and $M_2$, these
+equivalences give every displayed threshold, because each pointwise
+restriction is $\gamma\geq\eta_r(x;\boldsymbol g)$.
+
+The cosine coordinate is strictly decreasing on $I$, and the signed
+denominators stay positive on compact $J$. The extreme value theorem,
+Fermat's theorem, and the quotient rule therefore give the stated
+endpoint and stationary candidates. The functions $H_{r,\boldsymbol b}$
+are analytic on $(-1,1)$, so a nonzero stationary expression has only
+finitely many roots on $J$. If it vanishes identically, the mean value
+theorem gives constancy of the quotient.
+
+Choosing no restriction or one of two signs at each order gives
+$3^3-1=26$ nonempty combinations: six singles, twelve pairs, and eight
+triples. Of the $2^6-1=63$ nonempty selections from the six constraints,
+the other 37 contain opposing signs, which force the corresponding
+derivative to vanish identically. This gives zero, a constant, or an
+affine function. Analyticity extends any affine identity on $I$ to
+the padded interval, whose two endpoint values both equal $a_0$, so
+the affine curve is constant. Linear independence of the sine basis
+gives $a_1=\cdots=a_m=0$, with $a_0=0$ as well when both value signs
+are imposed. These proper linear subspaces have zero probability
+under the nondegenerate Gaussian posterior.
+\end{proofEnd}

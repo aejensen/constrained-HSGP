@@ -1,0 +1,96 @@
+\section{Implementation in Stan}\label{app:stan-implementation}
+
+For monotonicity and convexity, the Stan programs implement
+\cref{alg:posterior} using the No-U-Turn sampler (NUTS)
+\citep{hoffman2014nuts,carpenter2017stan}. The sampled parameter is
+the unconstrained vector $\boldsymbol z\in\mathbb R^m$. Gaussian
+preparation supplies $\boldsymbol m_g,\boldsymbol B,m_\gamma,
+\boldsymbol\lambda$, and $s>0$ as data, together with the basis
+geometry, constraint interval, and threshold tolerance. The threshold
+routine also has a specified precision budget. The rank and padding satisfy the conditions of
+\cref{cor:monotone,cor:convex}. Preparation allows a general
+positive-definite noise covariance. The convexity program uses a basis
+centered at zero, so a model centered at $c$ is represented by
+subtracting $c$ from both observation and constraint coordinates.
+
+At each target evaluation, the program forms
+$\boldsymbol g=\boldsymbol m_g+\boldsymbol B\boldsymbol z$ and
+$\mu=m_\gamma+\boldsymbol\lambda^T\boldsymbol z$, then evaluates
+the upper threshold $\widetilde\tau_r(\boldsymbol g)$.
+In \cref{lst:stan-core}, \texttt{threshold\_upper} denotes this
+value, \texttt{conditional\_sd} denotes $s$, and
+\texttt{alpha} denotes
+$\widetilde\alpha=(\widetilde\tau_r(\boldsymbol g)-\mu)/s$.
+The Gaussian inputs already incorporate the observations, so the
+model block adds only the log survival weight
+\texttt{log\_survival}$=\log\Phi^{\mathrm c}(\widetilde\alpha)$ to the
+standard normal log density of $\boldsymbol z$.
+
+External C++ functions supply the threshold and normal-tail operations.
+The threshold function follows
+\cref{subsec:threshold-computation} and attaches the approximate
+envelope derivative from \cref{subsec:threshold-derivatives} to
+its returned upper value through a custom automatic differentiation
+adapter. Stan can therefore propagate the force through the linear
+coefficient map without differentiating the root search or interval
+subdivision. The log-survival adapter uses the negative inverse
+Mills ratio, and the quantile routine accepts a log probability,
+as described in \cref{subsec:tail-computation}.
+
+\begin{listing}[htbp]
+\begin{minted}[fontsize=\footnotesize,breaklines]{stan}
+model {
+  target += -0.5 * dot_self(z) + log_survival;
+}
+generated quantities {
+  real eta = -normal_log_quantile(
+    log_survival + log(uniform_rng(0, 1)));
+  real gamma =
+    threshold_upper + conditional_sd * (eta - alpha);
+}
+\end{minted}
+\caption{Marginal sampling and conditional reconstruction in Stan.
+The excerpt assumes that the Gaussian transformations, upper threshold,
+and log survival weight have been evaluated. The generic routine
+\texttt{normal\_log\_quantile} returns $\Phi^{-1}(\exp(\ell))$
+from a supplied log probability $\ell$.}
+\label{lst:stan-core}
+\end{listing}
+
+For each retained $\boldsymbol z$, the generated-quantities block
+draws $\gamma$ from its truncated conditional Gaussian law using an
+independent uniform variate and the same upper threshold as the model
+block. Inverting the coefficient map then gives a joint coefficient
+draw. In particular, the monotonicity program restores $a_2=-\gamma$
+and $a_4=g_4-\gamma/4$, while the convexity program restores
+$a_1=-\gamma$. The other coefficients follow
+\cref{tab:coefficient-reconstruction}. The finite-value and quantile
+checks in \cref{subsec:tail-computation} apply to this reconstruction.
+
+Extending these programs to a joint restriction requires Gaussian
+inputs and reconstruction under the common map in
+\cref{cor:combinations}. The external threshold routine must enclose
+$\tau_A^\varepsilon$ and supply the envelope force from its active
+orders and locations, as described in
+\cref{subsec:threshold-computation,subsec:threshold-derivatives}.
+With these inputs, the scalar sampling and reconstruction blocks
+in \cref{lst:stan-core} apply unchanged.
+
+The returned log values determine the density used to weight NUTS
+states, whereas the supplied force determines the proposed trajectory.
+To justify this distinction, consider exact arithmetic with a fixed
+Euclidean metric, step size, and maximum tree depth after warm-up.
+Suppose the log values and force are finite, deterministic, measurable
+functions of position and the resulting density is normalizable.
+Leapfrog consists of position and momentum shears that preserve volume
+and invert when the step size changes sign. Consequently, momentum
+reversal makes the proposal reversible even when the force is not the
+log-density gradient \citep[Section 5.5]{neal2011hmc}.
+With the recursive subtree checks and weighted state selection of
+NUTS \citep[Appendices A.3--A.5]{betancourt2017conceptual}, this
+preserves the density defined by the returned log values in the ideal
+construction without evaluation failures or divergence truncation.
+The depth limit makes each transition finite. This argument justifies
+using an approximate envelope force but gives no bound on finite-chain
+or floating-point error, and the force approximation can still affect
+sampling efficiency.

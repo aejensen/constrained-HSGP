@@ -1,0 +1,282 @@
+\subsection{Continuum constraints through a Gaussian coefficient}\label{sec:methods}
+
+To express a continuum restriction through one coefficient, we first
+choose a function in the retained span whose selected derivative,
+including the function itself at order zero, is positive throughout $I$.
+A sufficiently large coefficient along this function then makes the
+selected quantity nonnegative everywhere on the interval, whatever
+the values of the remaining coefficients. Since an invertible change
+of coordinates preserves every admissible coefficient vector in the
+finite space, the restriction can be represented by a single lower
+bound without changing the underlying Gaussian law. The following
+result integrates that coefficient and reconstructs it conditionally,
+using the standard normal distribution function $\Phi$ and survival
+function $\Phi^{\mathrm c}(x)=1-\Phi(x)$.
+
+\input{theory/finite.tex}
+
+The Gaussian tail in \cref{eq:marginal} is the conditional probability
+that the separated coefficient is large enough to satisfy the
+constraint, so values of $\boldsymbol g$ receive less posterior weight
+when they require an unlikely value of that coefficient. Conditional
+reconstruction retains the resulting dependence on $\boldsymbol g$ and
+therefore gives joint draws of the curve and its derivatives. This
+dependence is inherited from the original Gaussian model and must be
+transported through the coefficient map, since assigning a new
+independent prior to the transformed coordinates would change the law.
+
+A related conditioning structure appears in GP regression with censored
+observations, where a Gaussian posterior density is weighted by the
+conditional probability of the censoring event
+\citep{gormhoffmann2025censored}. In that setting, inequalities describe
+censored measurements at finitely many locations, whereas the threshold
+here represents a restriction on the latent curve throughout an interval.
+
+The null-boundary statement in \cref{thm:finite} means that, under
+its assumptions, the conditioned law assigns probability zero to curves
+whose minimum response or selected derivative equals zero. Thus a draw
+from this law has a strictly positive minimum almost surely, although
+these minima can be arbitrarily close to zero. For monotonicity,
+positivity of the derivative at every point is stronger than strict
+ordering of function values, which alone does not require a positive
+derivative everywhere. Nearly flat regions therefore remain possible,
+but the analyticity of the finite expansion means that assigning
+positive probability to exact plateaus or linear segments of positive
+length requires a different prior.
+
+The random intercept supplies a constant direction for positivity,
+whereas monotonicity and convexity require directions with positive
+slope and curvature. For each choice, evaluating the threshold still
+requires finding a global extremum over $I$. On the padded interval of
+length $2L$, the zero boundary conditions require
+$\sin(2L\omega_j)=0$, giving
+$\omega_j=j\pi/(2L)=j\omega_1$ for $j\geq1$. The basis and its
+derivatives therefore involve sine and cosine harmonics of a common
+fundamental frequency.
+We introduce
+\[
+ \theta(x)=\omega_1(x-c+L),\qquad w(x)=\cos\theta(x),
+\]
+because each cosine harmonic becomes a polynomial in $w$, while each
+sine harmonic becomes $\sin\theta$ times a polynomial in $w$, through
+identities for the Chebyshev polynomials in \cref{def:chebyshev}.
+These identities allow the stationary locations needed for the
+thresholds to be characterized by polynomial equations.
+
+Since $I$ lies strictly inside the padded domain, $0<\theta(x)<\pi$
+and $\mathrm{d}w/\mathrm{d}x=-\omega_1\sin\theta(x)<0$ throughout $I$. Thus $w$ maps
+$I$ one-to-one onto a compact interval in $(-1,1)$, reversing the order
+of its endpoints. Its nonzero derivative ensures that interior
+stationary locations correspond in the two coordinates, so the change
+of variable preserves the complete search for a continuum extremum.
+
+\begin{definition}[Chebyshev polynomials]\label{def:chebyshev}
+The Chebyshev polynomials of the first kind, $T_j$, and second kind,
+$U_j$, are defined for $w\in\R$ by the initial values and recurrences
+\[
+ \begin{aligned}
+ T_0(w)&=1,\quad T_1(w)=w,
+ & T_{j+1}(w)&=2wT_j(w)-T_{j-1}(w),\\
+ U_0(w)&=1,\quad U_1(w)=2w,
+ & U_{j+1}(w)&=2wU_j(w)-U_{j-1}(w),
+ \end{aligned}
+\]
+where the recurrences hold for integers $j\geq1$.
+\end{definition}
+
+For $w=\cos\theta$, these polynomials satisfy the standard trigonometric
+identities \citep[Equations (18.5.1) and (18.5.2)]{nist2026dlmf}
+\[
+ T_j(w)=\cos(j\theta),\qquad
+ \sin\theta\,U_{j-1}(w)=\sin(j\theta),\qquad j\geq1.
+\]
+In particular, the basis and its first two derivatives satisfy
+\[
+ \phi_{j,L}(x)=\frac{\sin\theta(x)}{\sqrt L}\,U_{j-1}(w(x)),\quad
+ \frac{\mathrm{d}\phi_{j,L}}{\mathrm{d}x}(x)=\frac{j\omega_1}{\sqrt L}\,T_j(w(x)),\quad
+ \frac{\mathrm{d}^2\phi_{j,L}}{\mathrm{d}x^2}(x)=-\omega_j^2\phi_{j,L}(x).
+\]
+The second derivative therefore shares the sine factor in the first
+identity. For positivity, the polynomial
+representing the first derivative identifies the stationary locations
+of the curve. With the directions chosen below, monotonicity gives a
+ratio of polynomials with a positive denominator, while convexity gives
+a polynomial after the common sine factor cancels. Differentiating
+these expressions reduces their stationary-point conditions to
+polynomial equations. Evaluating the interval
+endpoints and these locations determines the global thresholds, with
+constant cases handled explicitly in the corollaries.
+
+The following three corollaries apply \cref{thm:finite} to positivity,
+monotonicity, and convexity, specifying a suitable direction and the
+corresponding continuum threshold for each restriction.
+
+\input{theory/specializations.tex}
+
+For positivity, separating $a_0$ leaves the spectral curve
+$f_{\boldsymbol g}$, and \cref{eq:positive-threshold} is the vertical
+shift needed to make its minimum nonnegative. The intercept's
+conditional posterior mean can depend on the spectral coefficients,
+so reconstruction uses that conditional law even though the prior
+coordinates are independent. The monotonicity map makes the same
+need to preserve dependence explicit by replacing $a_4$ with
+$g_4=a_4-a_2/4$, which is correlated with the separated coefficient
+$-a_2$. The convexity map simply sets aside the first mode, but all
+three constructions transport the ordinary Gaussian posterior before
+conditioning. In the two derivative cases, the intercept stays among
+the remaining coefficients and can change its posterior through
+correlation, despite contributing neither slope nor curvature.
+
+Although all three constructions use the same padded basis domain
+$(c-L,c+L)$, their directions give different sufficient conditions on
+the physical interval. The constant positivity direction requires no
+additional padding, and $h_2$ has positive curvature throughout the
+open basis domain, whereas the slope of the chosen $h_1$ is bounded
+away from zero on the central half, including its endpoints. The
+conditions in \cref{tab:cases} reflect these properties of the selected
+directions, so imposing the central-half condition on convexity would
+unnecessarily restrict that finite result.
+
+\begin{table}[htbp]
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llll}
+\toprule
+Quantity & Positivity & Monotonicity & Convexity\\
+\midrule
+Selected order & $r=0$ & $r=1$ & $r=2$\\
+Separated coefficient & $a_0$ & $-a_2$ & $-a_1$\\
+Direction & $1$ & $-\phi_{2,L}-\phi_{4,L}/4$ & $-\phi_{1,L}$\\
+Finite interval & $I\subset(c-L,c+L)$ & $I\subset[c-L/2,c+L/2]$ & $I\subset(c-L,c+L)$\\
+Rank condition & $m\geq1$ & $m\geq4$ & $m\geq2$\\
+Threshold & $-\min_I f_{\boldsymbol g}$ & $\max_J(-P_{\boldsymbol g}/D)$ & $\max_J Q_{\boldsymbol g}$\\
+Polynomial degree bound & $m$ & $m+3$ & $m-2$\\
+Limit space & $C(I)$ & $C^1(I)$ & $C^2(I)$\\
+Mat\'ern smoothness & $\nu>0$ & $\nu>1$ & $\nu>2$\\
+\bottomrule
+\end{tabular}
+\caption{Positivity, monotonicity, and convexity as alternative
+conditioning events in the same spectral model. Here $I$ is the physical
+interval and $J$ its image under the decreasing cosine coordinate $w$.
+The degree bounds apply to the nonzero polynomials whose roots identify
+stationary locations.
+The finite rank and
+interval conditions are sufficient for the displayed directions. The
+function-space limits additionally require \cref{ass:spectral} and the
+padding and frequency-cutoff limits in \cref{thm:approximation}.}
+\label{tab:cases}
+\end{table}
+
+To compute the thresholds in
+\cref{eq:positive-threshold,eq:monotone-threshold,eq:convex-threshold},
+we compare values at the two interval endpoints and at the interior
+stationary locations identified by the polynomial roots in $J$.
+For positivity, we evaluate $f_{\boldsymbol g}$ at the corresponding
+locations in $I$ and take the negative of the smallest value. For
+monotonicity and convexity, we take the largest value of
+$-P_{\boldsymbol g}/D$ and $Q_{\boldsymbol g}$, respectively, at the
+candidate values of $w$. Every interior real root must be included,
+even when the derivative does not change sign there. If the stationary
+polynomial vanishes identically, the function being optimized is
+constant and an endpoint evaluation suffices.
+
+Nonpositivity, nonincreasing regression, and concavity follow by negating
+the observations and prior mean while retaining all covariances, then
+applying the corresponding nonnegative-derivative construction and
+negating the reconstructed curve and its derivatives. In particular,
+concavity makes the slope nonincreasing but allows it to have either
+sign, so a curvature restriction alone does not impose monotonicity.
+\cref{tab:coefficient-reconstruction} summarizes the inverse maps for
+all six individual sign constraints.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+Constraint & Reinserted coefficients & Remaining coefficients\\
+\midrule
+Positivity & $a_0=\gamma$
+  & $a_j=g_j$, $1\leq j\leq m$\\
+Negativity & $a_0=-\gamma$
+  & $a_j=-g_j$, $1\leq j\leq m$\\
+\addlinespace
+Nondecreasing & $a_2=-\gamma$, $a_4=g_4-\gamma/4$
+  & $a_j=g_j$, $j\notin\{2,4\}$\\
+Nonincreasing & $a_2=\gamma$, $a_4=-g_4+\gamma/4$
+  & $a_j=-g_j$, $j\notin\{2,4\}$\\
+\addlinespace
+Convexity & $a_1=-\gamma$
+  & $a_j=g_j$, $j\ne1$\\
+Concavity & $a_1=\gamma$
+  & $a_j=-g_j$, $j\ne1$\\
+\bottomrule
+\end{tabular}
+\caption[Reconstruction for six sign constraints]{Inverse maps to the
+original coefficients for six constraints on $I$. Positivity and
+negativity mean $f_{\boldsymbol a}\geq0$ and $f_{\boldsymbol a}\leq0$.
+The negative, nonincreasing, and concave cases use
+$(\boldsymbol g,\gamma)$ from the Gaussian calculation for
+$-f_{\boldsymbol a}$ with negated observations and prior mean.
+The other cases use $f_{\boldsymbol a}$. Indices range from $0$ to $m$
+unless stated otherwise, and $g_j$ retains its original coefficient
+index. Each pair uses the rank and padding conditions of its
+corresponding case in \cref{cor:positive,cor:monotone,cor:convex}.}
+\label{tab:coefficient-reconstruction}
+\end{table}
+
+Several restrictions can describe different aspects of the same
+response. A nonnegative, nondecreasing, concave curve, for example,
+has a nonnegative level and slope, with the slope nonincreasing across
+the interval. We express such intersections by selecting derivative
+orders and a sign at each order. For a nonempty index set
+$A\subseteq\{0,1,2\}$ and a sign choice
+$\varepsilon:A\to\{-1,1\}$, write $\varepsilon_r=\varepsilon(r)$ and define
+\begin{equation}\label{eq:joint-event}
+ \mathcal C_A^\varepsilon=\left\{f\in C^{\max A}(I):
+       \varepsilon_r\frac{\mathrm{d}^rf}{\mathrm{d}x^r}(x)\geq0
+       \text{ for every }r\in A\text{ and }x\in I\right\}.
+\end{equation}
+At order zero, the two signs give nonnegativity and nonpositivity.
+At orders one and two, they give nondecreasingness and nonincreasingness,
+and convexity and concavity, respectively. Taking $\varepsilon_r=1$
+at every selected order gives positivity, nondecreasingness, and
+convexity, their three pairwise combinations, and their triple
+combination. Allowing either sign gives six individual cases and
+20 joint combinations without opposing signs. Imposing both signs
+at the same order instead forces the corresponding derivative to
+vanish throughout $I$, an event of zero probability under the finite
+Gaussian model.
+
+To retain the scalar conditioning construction, we need one direction
+$h$ in the retained span whose selected signed derivatives are all
+uniformly positive on $I$. Increasing its coefficient then increases
+every signed derivative involved in the restriction. Each order and
+location imposes a lower bound on this same coefficient, so their
+largest bound enforces the entire intersection. The direction
+condition must be verified for the chosen combination, rank, and
+interval. The following proposition gives the resulting Gaussian
+conditioning law.
+
+\input{theory/joint.tex}
+
+The joint restrictions can also reduce the number of continuum
+searches. For the nonnegative, nondecreasing, concave example, take
+$A=\{0,1,2\}$ with $\varepsilon_0=\varepsilon_1=1$ and
+$\varepsilon_2=-1$. Concavity makes the slope smallest at $x_+$,
+and nondecreasingness makes the response smallest at $x_-$.
+Under the common map in \cref{prop:joint}, the threshold therefore becomes
+\[
+ \tau_A^\varepsilon(\boldsymbol g)
+ =\max\left\{
+       \max_{x\in I}\eta_2(x;\boldsymbol g),
+       \eta_1(x_+;\boldsymbol g),\eta_0(x_-;\boldsymbol g)
+       \right\}.
+\]
+Thus this combination requires one continuum curvature bound and
+two endpoint bounds. All three use the same $h$ and $\boldsymbol g$,
+whose choice determines the quotients in \cref{eq:joint-threshold}.
+The supplementary material gives the HSGP coefficient map, conditions
+on its direction coefficients, and the reductions for all sign choices,
+with a table separating continuum and endpoint bounds for the 20
+joint cases.

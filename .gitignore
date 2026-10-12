@@ -1,0 +1,25 @@
+.DS_Store
+.Rhistory
+.RData
+Rplots.pdf
+.build/
+build/
+runs/
+output/
+__pycache__/
+*.py[cod]
+*.o
+*.so
+*.dylib
+
+# LaTeX intermediates
+manuscript/*.aux
+manuscript/*.bbl
+manuscript/*.blg
+manuscript/*.log
+manuscript/*.out
+manuscript/*.fls
+manuscript/*.fdb_latexmk
+manuscript/*-pratend*.tex
+manuscript/_minted*/
+manuscript/submission/

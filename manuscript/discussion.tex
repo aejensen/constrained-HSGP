@@ -1,0 +1,40 @@
+\section{Discussion}\label{sec:discussion}
+
+This paper develops a common conditioning construction for positivity,
+monotonicity, and convexity in the Laplacian eigenfunction expansion.
+Its contribution is to express these whole-interval events within
+the HSGP model using its existing basis and kernel-derived Gaussian
+prior, including joint restrictions when a suitable common direction
+is available. The resulting representation supports joint inference
+for the curve and its derivatives and separates the definition of
+the conditioned posterior from the numerical evaluation of its
+threshold.
+
+The approximation theory connects this finite construction to
+conditioning the underlying GP. For the individual constraints,
+the connection holds under the stated spectral assumptions as both
+padding and frequency cutoff increase, giving a basis for using
+finite expansions to approximate the corresponding constrained
+process. The joint construction is exact within the finite expansion,
+while the convergence theorem covers the individual restrictions.
+
+The practical cost of the representation comes from evaluating a
+global threshold at each posterior-density calculation. Its
+maximizing location can change with the coefficients, creating kinks
+that matter for gradient-based sampling even when the marginal law
+is strongly log-concave. The threshold-error analysis controls the
+posterior change caused by conservative evaluation, while sampler
+accuracy and computational cost remain separate considerations.
+Developing samplers that exploit this geometry while accommodating
+the nonsmooth threshold is a useful direction for further work.
+
+The mercury and leaf applications show that shape restrictions can
+substantially change derivative inference even when the fitted response
+curves remain similar. These changes matter because the derivatives
+determine the inferred mercury concentration and marginal carbon
+assimilation, respectively. Comparing the constrained and ordinary
+Gaussian posteriors makes the contribution of the shape assumption
+explicit in both the estimates and their uncertainty. The construction
+thus connects scientifically motivated restrictions to joint inference
+for the response and its derivatives, with the chosen constraint
+enforced throughout the interval.

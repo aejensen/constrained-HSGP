@@ -1,0 +1,32 @@
+Let $k(u)$ be a real stationary covariance function with a spectral
+density, where $u=x-x'$ is the separation between inputs. We write
+$S_k:\R\to[0,\infty)$ for its nonnegative, even, integrable spectral
+density and use the Fourier convention
+\[
+ k(u)=\frac1{2\pi}\int_\R e^{\mathrm i\omega u}S_k(\omega)\,d\omega,
+ \qquad u\in\R.
+\]
+Here $\omega$ is angular frequency, and $S_k(\omega)$ is the spectral
+density associated with the covariance function $k$ through this
+Fourier relation, evaluated at frequency $\omega$. The HSGP expansion
+uses this density to assign variances at a discrete set of frequencies
+determined by the Laplacian on a bounded interval.
+
+Fix a center $c\in\R$, a half-width $L>0$, an integer $m\geq1$,
+and a compact interval $I=[x_-,x_+]$ of positive length inside
+$(c-L,c+L)$. On the padded interval $[c-L,c+L]$, the negative
+Laplacian with zero boundary values has eigenvalues $\omega_j^2$
+and orthonormal eigenfunctions $\phi_{j,L}$. Using the spectral
+density $S_k$, these functions define the
+finite Gaussian expansion
+\begin{equation}\label{eq:finite-model}
+ \begin{aligned}
+ \phi_{j,L}(x)&=L^{-1/2}\sin(\omega_j(x-c+L)),
+ &\omega_j&=j\pi/(2L),\\
+ f_{\boldsymbol a}(x)&=a_0+\sum_{j=1}^ma_j\phi_{j,L}(x),
+ &a_0&\sim N(\mu_0,\sigma_0^2),\quad a_j\sim N(0,S_k(\omega_j)).
+ \end{aligned}
+\end{equation}
+The coefficients are independent, with $\sigma_0>0$ and
+$S_k(\omega_j)>0$ at each retained frequency, so the finite coefficient
+law is nondegenerate.

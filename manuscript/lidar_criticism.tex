@@ -1,0 +1,32 @@
+For each retained monotone posterior curve, define the standardized residuals $e_i(\boldsymbol{a})=(y_i-f_{\boldsymbol{a}}(x(r_i)))/\sigma_i$.
+We generate one independent replicate dataset from
+\[
+ Y_i^{\mathrm{rep}}\mid \boldsymbol{a}\overset{\mathrm{ind}}\sim N(f_{\boldsymbol{a}}(x(r_i)),\sigma_i^2),
+ \qquad e_i^{\mathrm{rep}}(\boldsymbol{a})=\frac{Y_i^{\mathrm{rep}}-f_{\boldsymbol{a}}(x(r_i))}{\sigma_i}.
+\]
+We compute the mean squared residual $n^{-1}\sum_i e_i(\boldsymbol{a})^2$, maximum $\max_i|e_i(\boldsymbol{a})|$, and absolute sample correlation between the paired vectors $(e_1,\ldots,e_{n-1})$ and $(e_2,\ldots,e_n)$, ordered by recorded distance.
+Here adjacency refers to consecutive released ranges, whose spacings vary. The two remaining discrepancies are the signed mean residuals over $r_i\leq555$ meters and $r_i>555$ meters, each averaged over the observations in its own half of the range. Applying the same definitions to $e_i^{\mathrm{rep}}$ gives the replicated discrepancies in \cref{tab:lidarcriticism}.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Constrained posterior discrepancy & Lower tail & Upper tail \\
+\midrule
+Mean squared standardized residual & 0.5931 & 0.4069 \\
+Maximum absolute standardized residual & 0.3914 & 0.6086 \\
+Absolute adjacent residual correlation & 0.5359 & 0.4641 \\
+Mean standardized residual at $r\leq555$ m & 0.3526 & 0.6474 \\
+Mean standardized residual at $r>555$ m & 0.4235 & 0.5765 \\
+\bottomrule
+\end{tabular}
+\caption[Residual checks for mercury lidar]{
+Posterior predictive checks from $8{,}000$ globally monotone posterior curves, with one independent Gaussian replicate dataset per curve.
+Lower and upper tails give the fractions of replicated discrepancies at or below and at or above the observed discrepancies for the same posterior curve, with the two range summaries split at the midpoint of $555$ meters.
+The summaries condition on the fitted covariance and noise parameters and reuse the fitting data, so they are neither calibrated test probabilities nor out-of-sample predictive scores.}
+\label{tab:lidarcriticism}
+\end{table}
+
+The upper-tail fractions in \cref{tab:lidarcriticism} range from
+$0.4069$ to $0.6474$, with no pronounced disagreement for these
+summaries under the specified observation model.

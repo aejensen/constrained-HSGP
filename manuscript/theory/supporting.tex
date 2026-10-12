@@ -1,0 +1,35 @@
+\subsection{Whitened posterior geometry}
+\begin{theoremEnd}[normal,category=geometry]{proposition}[Strong log-concavity of the marginal posterior]
+\CombinedResultCheck{prop:geometry}{proposition}\label{prop:geometry}
+Under \cref{thm:finite}, let
+$\boldsymbol B\boldsymbol B^T=\boldsymbol V_g$ with $\boldsymbol B$
+invertible and put $\boldsymbol g=\boldsymbol m_g+\boldsymbol B\boldsymbol z$.
+The induced density $q_r$ of $\boldsymbol z$ is $1$-strongly
+log-concave. That is, $\log q_r(\boldsymbol z)+\|\boldsymbol z\|^2/2$
+is concave. It has a unique mode and finite moments of every
+polynomial order.
+\end{theoremEnd}
+\begin{proofEnd}
+\CombinedProofCheck{prop:geometry}
+Fix the Gaussian posterior, selected order, and invertible whitening
+factor in \cref{prop:geometry}. Since $\tau_r$ is a maximum of
+linear functions, it is convex. Subtracting the affine conditional
+mean and dividing by $s>0$ therefore makes
+$\alpha_r=(\tau_r-\mu)/s$ convex in the whitened coordinates.
+Under the ordinary posterior,
+$\eta=(\gamma-\mu(\boldsymbol g))/s$ is standard normal and independent
+of $\boldsymbol z$. The joint standard normal density in
+$(\boldsymbol z,\eta)$ restricted to the convex epigraph
+$\eta\geq\alpha_r(\boldsymbol z)$ is $1$-strongly log-concave and
+has positive normalizer by \cref{thm:finite}.
+Preservation under marginalization
+\citep[Theorem 3.8]{saumard2014logconcavity} gives the same constant
+for $q_r$.
+To obtain the moment and mode conclusions, use the survival factor's
+continuity, positivity, and upper bound of one:
+$q_r$ is continuous and bounded above by the standard normal density
+divided by the positive event probability. This bound gives all
+polynomial moments and convergence of the density to zero at infinity,
+so continuity implies attainment of a mode, which strong
+log-concavity makes unique.
+\end{proofEnd}

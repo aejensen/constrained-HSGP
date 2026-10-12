@@ -1,0 +1,29 @@
+\begin{theoremEnd}{assumption}[Common underlying and finite Gaussian models]
+\CombinedResultCheck{ass:underlying}{assumption}\label{ass:underlying}
+Fix $I\subset[c-R,c+R]$ with $R>0$ and the observation model and
+intercept law specified in \cref{sec:finite-model}. Let $F=a_0+W$, where $W$ is
+a centered stationary GP on $\R$, independent of $a_0$, with covariance
+function $k$ and spectral density $S_k$ as defined in
+\cref{sec:finite-model}. Use that same spectrum and intercept in the finite models in
+\cref{eq:finite-model}, varying only $m$ and $L$ while keeping the
+center, interval, spectrum, intercept law, observation locations,
+positive-definite noise covariance, and data identical in all models.
+\end{theoremEnd}
+
+\begin{theoremEnd}{assumption}[Spectral regularity for the selected order]
+\CombinedResultCheck{ass:spectral}{assumption}\label{ass:spectral}
+Fix $r\in\{0,1,2\}$. The spectrum $S_k$ is continuous, even, and
+strictly positive. There is a regularity parameter $\zeta\in(0,1]$
+such that the two functions
+\[
+ \omega\longmapsto S_k(\omega),
+ \qquad \omega\longmapsto\omega^{2r+2\zeta}S_k(\omega)
+\]
+are locally absolutely continuous on $[0,\infty)$, and each function
+and its derivative belongs to $L^1(0,\infty)$.
+The weighted spectrum $\omega^{2r+2\zeta}S_k(\omega)$ tends to zero
+as $\omega\downarrow0$, and we use this limiting value at the origin.
+The frequency exponent is
+$2\zeta$ for positivity, $2+2\zeta$ for monotonicity, and
+$4+2\zeta$ for convexity.
+\end{theoremEnd}

@@ -1,0 +1,163 @@
+\section{Geometry, numerical error, and approximation}\label{sec:theory}
+
+At a fixed location $x\in I$, the ratio in \cref{eq:threshold} is
+the lower bound on $\gamma$ required to satisfy the sign restriction
+at that location. Because $f_{\boldsymbol g}$ depends linearly on
+$\boldsymbol g$ and $h_r$ is fixed, this bound is a linear function
+$\boldsymbol\beta_r(x)^T\boldsymbol g$. Here
+$\boldsymbol\beta_r(x)\in\R^m$ is the vector of coefficient
+multipliers, with its entries ordered as those of $\boldsymbol g$.
+For positivity, for example, $h_0=1$ and
+$\boldsymbol g=(a_1,\ldots,a_m)^T$, so
+$\boldsymbol\beta_0(x)=(-\phi_{1,L}(x),\ldots,-\phi_{m,L}(x))^T$.
+The continuum threshold is therefore
+\[
+ \tau_r(\boldsymbol g)
+   =\max_{x\in I}\boldsymbol\beta_r(x)^T\boldsymbol g.
+\]
+
+The continuity assumptions and positive derivative bound in
+\cref{thm:finite} make $\boldsymbol\beta_r$ continuous and bounded
+on $I$, so the maximum representation makes $\tau_r$ convex,
+positively homogeneous, and globally Lipschitz.
+The threshold enters the log posterior through the normal survival
+weight, so its derivatives are needed to compute the gradients used
+in posterior sampling. Danskin's theorem \citep{danskin1966maxmin}
+expresses these derivatives through the coefficient vectors at
+maximizing locations. When the maximizing location $x_\star$ is
+unique, the threshold has gradient $\boldsymbol\beta_r(x_\star)$.
+Several maximizing locations also permit a gradient when their
+coefficient vectors agree, whereas different vectors produce kinks.
+The supplementary material gives the threshold derivatives and the
+resulting log-posterior gradient formulas.
+For a joint restriction in \cref{prop:joint},
+the vectors are formed under the common coefficient map and the
+maximum ranges over pairs $(r,x)\in A\times I$. A change in the
+maximizing derivative order can therefore produce a kink as well
+as a change in its location.
+
+Let $\boldsymbol B\boldsymbol B^T=\boldsymbol V_g$ with
+$\boldsymbol B$ invertible, and write
+$\boldsymbol g(\boldsymbol z)=\boldsymbol m_g+\boldsymbol B\boldsymbol z$.
+The exact whitened log density, up to a constant, is
+\begin{equation}\label{eq:whitened-target}
+ -\tfrac12\|\boldsymbol z\|^2+
+ \log\Phi^{\mathrm c}\left(\frac{\tau_r(\boldsymbol g(\boldsymbol z))
+                         -\mu(\boldsymbol g(\boldsymbol z))}{s}\right).
+\end{equation}
+The supplementary material establishes that this density is
+$1$-strongly log-concave, giving a unique mode and finite moments of
+every polynomial order.
+
+The continuum maximum generally requires numerical evaluation, and
+an underestimated threshold would admit curves that violate the
+intended sign restriction. We therefore use a conservative upper
+threshold $\widetilde\tau_r\geq\tau_r$, so that imposing
+$\gamma\geq\widetilde\tau_r(\boldsymbol g)$ preserves the restriction.
+The cost is that admissible coefficient values between the exact and
+upper thresholds are excluded from the posterior.
+The upper threshold may not be
+convex, so the log-concavity conclusion need not carry over to this
+numerical posterior. Its difference from the exact law can instead
+be quantified through the probability mass of the excluded
+coefficients, as the following proposition shows under exact Gaussian
+operations.
+
+\input{theory/error.tex}
+
+The conditioning probability in \cref{eq:tv} explains why a rare
+shape event is more sensitive to a given absolute threshold error.
+The bound requires the threshold
+guarantee to hold globally or almost everywhere under the ordinary
+posterior and quantifies the effect of threshold arithmetic within
+the finite model, leaving basis approximation and finite-chain error
+as separate quantities.
+
+\subsection{Convergence to the conditioned underlying GP}
+
+We next consider the error introduced by replacing the underlying GP
+with a finite HSGP expansion, and how this error depends on padding
+and rank.
+Increasing $L$ separates the artificial boundary from the physical
+interval $I$, whereas $m/L$ controls the frequency cutoff, so increasing
+padding at fixed rank can remove variation at short scales. The two
+choices must therefore be considered together and for the derivative
+used in inference as well as for the response
+\citep{riutort2023practicalhsgp}.
+
+Because the conditioning event depends on the response or its selected
+derivative between grid points, convergence of covariance blocks on
+a finite grid is insufficient for comparing the conditioned laws.
+We instead work on the entire physical interval in
+$C^r(I)$ with its Borel sigma-field and norm
+\[
+ \|f\|_{C^r}=\sum_{j=0}^r\sup_{x\in I}
+             \left|\frac{\mathrm{d}^jf}{\mathrm{d}x^j}(x)\right|,
+ \qquad \frac{\mathrm{d}^0f}{\mathrm{d}x^0}=f.
+\]
+
+\input{theory/approximation_assumptions.tex}
+
+Under the Fourier representation of the stationary covariance,
+differentiating $r$ times with respect to each input multiplies
+the spectrum by $\omega^{2r}$. The additional factor $\omega^{2\zeta}$
+allows us to bound the variance of the difference between the $r$th
+derivative values at $x$ and $x'$ by a constant multiple of
+$|x-x'|^{2\zeta}$. With $\zeta$ held fixed in the approximation limit,
+this increment bound supplies the additional regularity needed for
+continuity and tightness in $C^r(I)$.
+
+Let $\Pi_{m,L,\boldsymbol y}^{\mathcal C_r}$ and
+$\Pi_{\boldsymbol y}^{\mathcal C_r}$ denote the finite and underlying
+posterior laws obtained by weighting their priors by the common
+Gaussian likelihood and the indicator of \cref{eq:shape-event}.
+For laws with finite second norm moments, define
+\[
+ W_2(P,Q)=\inf_{\lambda}
+ \left(\int\|f-g\|_{C^r}^2\,\lambda(df,dg)\right)^{1/2},
+\]
+where $\lambda$ ranges over couplings with marginals $P,Q$.
+
+Convergence in $W_2$ means that the finite-model curve $F_{m,L}$ and
+the underlying curve $F$, with their respective posterior distributions
+conditional on the data and $\mathcal C_r$, can be coupled so that
+\[
+ \E\left[
+ \sup_{x\in I}
+ \left|
+ \frac{\mathrm{d}^jF_{m,L}}{\mathrm{d}x^j}(x)
+ -
+ \frac{\mathrm{d}^jF}{\mathrm{d}x^j}(x)
+ \right|^2
+ \right]\longrightarrow0,
+ \qquad j=0,\ldots,r,
+\]
+as $L\to\infty$ and $m/L\to\infty$. Under this coupling, the
+expected squared maximum discrepancy over $I$ vanishes for the
+response and each derivative through order $r$.
+
+\input{theory/approximation.tex}
+
+The spectral weight controls the highest derivative in the
+function-space norm, so positivity needs only a continuous process,
+whereas monotonicity and convexity require $C^1$ and $C^2$ regularity,
+respectively. The proof adapts the derivative-covariance argument of
+\citet[Theorem 2 and its proof]{differentialensembles2026} to the
+weighted-spectral conditions above, then uses increment moments to
+obtain convergence in that space and passes through likelihood
+and event conditioning. This last step requires positive event
+probability and a null boundary, which the independent random intercept
+supplies for positivity and a positive reproducing kernel Hilbert space
+(RKHS) derivative direction supplies for the two derivative constraints.
+
+Squared exponential spectra satisfy all three sets of conditions. A Mat\'ern
+spectrum is proportional to
+$(\lambda^2+\omega^2)^{-(\nu+1/2)}$ with $\lambda>0$
+\citep[Chapter 4]{rasmussen2006gpml}. Its weight of order $d$ is
+integrable when $d<2\nu$, and the weighted derivative is integrable
+for the orders used here, so any
+$0<\zeta<\min(1,\nu-r)$ verifies \cref{ass:spectral} when
+$\nu>r$. The conditions also hold for positive finite mixtures with
+a common smaller exponent. A squared exponential covariance multiplied
+by $\cos(\omega_0u)$, with fixed $\omega_0\geq0$, also qualifies
+because its spectrum is a positive sum of translated Gaussian densities.

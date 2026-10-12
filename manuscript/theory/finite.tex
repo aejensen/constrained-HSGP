@@ -1,0 +1,93 @@
+\begin{theoremEnd}[combined main,category=finite]{theorem}[Gaussian conditioning under a continuum sign restriction]
+\CombinedResultCheck{thm:finite}{theorem}\label{thm:finite}
+Under the finite Gaussian model in \cref{sec:finite-model}, let
+$\boldsymbol a=(a_0,\ldots,a_m)^T$ denote the coefficient vector and fix
+$r\in\{0,1,2\}$. Suppose an invertible linear change of coordinates
+$\boldsymbol a\mapsto(\boldsymbol g,\gamma)\in\R^m\times\R$
+gives $f_{\boldsymbol a}=f_{\boldsymbol g}+\gamma h_r$.
+Here $h_r$ is a fixed function in the retained span, chosen to have a
+uniformly positive $r$th derivative on $I$, and $\gamma$ is its scalar
+coefficient. The curve $f_{\boldsymbol g}$ depends linearly on the
+remaining coordinates $\boldsymbol g$. Assume these functions belong
+to $C^r(I)$ with
+$\min_{x\in I}\frac{\mathrm{d}^rh_r}{\mathrm{d}x^r}(x)>0$.
+In these coordinates, the ordinary Gaussian posterior has the form
+\begin{equation}\label{eq:conditional}
+ \boldsymbol g\mid\boldsymbol y\sim N(\boldsymbol m_g,\boldsymbol V_g),
+ \qquad \gamma\mid\boldsymbol g,\boldsymbol y\sim N(\mu(\boldsymbol g),s^2).
+\end{equation}
+Here $\boldsymbol V_g$ is positive definite, $\mu$ is affine, and
+$s>0$ is constant in $\boldsymbol g$. The finite, attained threshold
+\begin{equation}\label{eq:threshold}
+ \tau_r(\boldsymbol g)=\max_{x\in I}
+ \frac{-\frac{\mathrm{d}^rf_{\boldsymbol g}}{\mathrm{d}x^r}(x)}
+      {\frac{\mathrm{d}^rh_r}{\mathrm{d}x^r}(x)}
+\end{equation}
+satisfies $f_{\boldsymbol a}\in\mathcal C_r$ exactly when
+$\gamma\geq\tau_r(\boldsymbol g)$. This event has positive ordinary
+posterior probability and a null boundary in coefficient space.
+Its marginal density for $\boldsymbol g$ with
+respect to Lebesgue measure on $\R^m$ is
+\begin{equation}\label{eq:marginal}
+ p(\boldsymbol g\mid\boldsymbol y,\mathcal C_r)=
+ \frac{p(\boldsymbol g\mid\boldsymbol y)
+ \Phi^{\mathrm c}((\tau_r(\boldsymbol g)-\mu(\boldsymbol g))/s)}
+ {P(f_{\boldsymbol a}\in\mathcal C_r\mid\boldsymbol y)}.
+\end{equation}
+Given this draw of $\boldsymbol g$, draw $\gamma$ from the conditional normal in
+\cref{eq:conditional} truncated below at $\tau_r(\boldsymbol g)$ and
+apply the inverse coefficient map. Equivalently, for an independent
+$U\sim\operatorname{Uniform}(0,1)$,
+\begin{equation}\label{eq:reconstruction}
+ \gamma=\mu(\boldsymbol g)-s\Phi^{-1}
+ \bigl(U\Phi^{\mathrm c}((\tau_r(\boldsymbol g)-\mu(\boldsymbol g))/s)\bigr).
+\end{equation}
+This reconstructs the full conditioned coefficient law, under which
+$\min_I\frac{\mathrm{d}^rf_{\boldsymbol a}}{\mathrm{d}x^r}>0$ almost surely.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{thm:finite}
+Fix $r$, $I$, the invertible map, and the ordinary posterior under
+the finite Gaussian model in \cref{sec:finite-model} and the
+positive-direction hypotheses of
+\cref{thm:finite}, and write
+$b_r=\min_{x\in I}\frac{\mathrm{d}^rh_r}{\mathrm{d}x^r}(x)>0$.
+The role of the positive direction is to turn every
+derivative inequality into a lower bound on the same scalar coefficient:
+division by $\frac{\mathrm{d}^rh_r}{\mathrm{d}x^r}$ gives the threshold equivalence,
+and continuity on compact $I$, together with $b_r>0$, makes
+\cref{eq:threshold} finite and attained. Since the invertible map
+preserves positive definiteness of the posterior covariance, Gaussian conditioning
+\citep[Section 2.2]{rasmussen2006gpml} gives
+\cref{eq:conditional}, including a positive Schur complement $s^2$.
+
+Integrating the restricted joint Gaussian density over the scalar
+coefficient now leaves its conditional survival probability as a
+weight on $\boldsymbol g$, which proves \cref{eq:marginal}.
+This weight is strictly positive for every $\boldsymbol g$, so the
+conditioning event has positive probability. Given a draw from the
+weighted marginal, conditioning the Gaussian law of
+$\gamma\mid\boldsymbol g,\boldsymbol y$ on
+$\gamma\geq\tau_r(\boldsymbol g)$ gives the stated truncated normal,
+whose survival-function inverse is \cref{eq:reconstruction}.
+Applying the inverse coefficient map therefore recovers the original
+coefficient law conditional on the sign restriction.
+
+The minimum derivative is continuous in the coefficients, so coefficient
+vectors with a positive minimum lie in the event's interior and those
+with a negative minimum lie in its exterior. Conditional on
+$\boldsymbol g$, the nondegenerate normal assigns zero
+mass to equality at the threshold. At equality an attained maximizing
+location has zero derivative, whereas above it
+\[
+ \min_I\frac{\mathrm{d}^rf_{\boldsymbol a}}{\mathrm{d}x^r}
+ \geq(\gamma-\tau_r(\boldsymbol g))b_r>0.
+\]
+At equality, an arbitrarily small increase or decrease in $\gamma$
+moves to either side of the event, identifying its coefficient boundary
+as precisely the threshold graph.
+Its zero Gaussian probability implies that the reconstructed law lies
+strictly above the graph almost surely, proving the strict-derivative
+assertion.
+\end{proofEnd}

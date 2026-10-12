@@ -1,0 +1,323 @@
+\begin{theoremEnd}[combined main,category=approximation]{theorem}[Convergence of shape-constrained HSGP posteriors]
+\CombinedResultCheck{thm:approximation}{theorem}\label{thm:approximation}
+Fix $r\in\{0,1,2\}$ under \cref{ass:underlying,ass:spectral}, and
+consider finite models with $L\geq2R$ and $m\geq1$ for $r=0$,
+$m\geq4$ for $r=1$, or $m\geq2$ for $r=2$.
+The underlying GP has a $C^r(I)$ version, and the finite and underlying
+shape events have positive probability and null boundaries in that space.
+Consequently, the posteriors conditional on the data and $\mathcal C_r$
+exist, with finite moments of every polynomial order in $\|\cdot\|_{C^r}$.
+As $L\to\infty$ and $m/L\to\infty$,
+\begin{equation}\label{eq:wasserstein}
+ W_2\bigl(\Pi_{m,L,\boldsymbol y}^{\mathcal C_r},
+          \Pi_{\boldsymbol y}^{\mathcal C_r}\bigr)\longrightarrow0.
+\end{equation}
+This convergence also holds for the posterior summaries: means of
+$\frac{\mathrm{d}^jf}{\mathrm{d}x^j}$ converge uniformly on $I$ for
+every $0\leq j\leq r$, and covariances between
+$\frac{\mathrm{d}^{r_1}f}{\mathrm{d}x^{r_1}}(x)$ and $\frac{\mathrm{d}^{r_2}f}{\mathrm{d}x^{r_2}}(x')$
+converge uniformly on $I\times I$ for every $0\leq r_1,r_2\leq r$.
+Under the conditioned underlying law,
+$\min_I\frac{\mathrm{d}^rf}{\mathrm{d}x^r}>0$ almost surely.
+\end{theoremEnd}
+\begin{proofEnd}
+\CombinedProofCheck{thm:approximation}
+Fix $r$ and any sequence of models satisfying the conditions and limits
+in \cref{thm:approximation}.
+Write $F_{m,L}$ for a draw from the finite prior and
+$k_{m,L}(x,x')=\sum_{j=1}^mS_k(\omega_j)\phi_{j,L}(x)\phi_{j,L}(x')$
+for the covariance of its spectral component.
+We first establish weak convergence of the priors in $C^r(I)$ and
+uniform norm moments. Positive shape probability and a boundary of
+prior probability zero will then allow passage to the conditioned
+posteriors, whose moment bounds give Wasserstein convergence and
+convergence of the stated summaries.
+
+\paragraph{Covariance and increment bounds.}
+Put $b=2r+2\zeta$. The two spectral weights in
+\cref{ass:spectral} also control the intermediate orders needed for
+covariance derivatives. For each integer $0<d\leq2r$, differentiating
+$\omega^dS_k(\omega)$ on $[0,1]$ gives integrable terms because $S_k$
+is bounded there and its derivative is integrable. On $[1,\infty)$,
+write the same function as $\omega^{d-b}(\omega^bS_k(\omega))$.
+The multiplier and its derivative are bounded, so the product and its
+derivative are integrable. Thus, for $d=0,\ldots,2r$ and $d=b$,
+the weighted spectra are locally absolutely continuous and have
+themselves and their derivatives in $L^1(0,\infty)$, with the cases
+$d=0$ and $d=b$ supplied directly by the assumption. Their finite
+values at zero and integrable derivatives also give boundedness.
+The derivative-covariance argument of
+\citet[Theorem 2 and its proof]{differentialensembles2026} then gives, for
+$0\leq r_1,r_2\leq r$, with $d=r_1+r_2$:
+\begin{equation}\label{eq:covariance-bound}
+ \sup_{x,x'\in I}\left|
+ \frac{\partial^{r_1+r_2}(k_{m,L}(x,x')-k(x-x'))}
+      {\partial x^{r_1}\partial(x')^{r_2}}\right|
+ \leq\frac{b_d}{L}+\frac1\pi\int_{\pi m/(2L)}^\infty
+                       \omega^dS_k(\omega)\,d\omega,
+\end{equation}
+where $b_d<\infty$ is independent of $m$ and $L$.
+The cited theorem states stronger conditions on classical derivatives,
+but its proof bounds frequency-cell errors by integrals of absolute
+derivatives and the reflected term by consecutive frequency differences.
+Both steps require only the absolute continuity, integrability, and
+boundedness verified above. In \cref{eq:covariance-bound}, the first
+term vanishes as the padded boundary recedes, while the second vanishes
+as the frequency cutoff increases. The common intercept adds no
+covariance error.
+
+For the frequency spacing $\Delta=\pi/(2L)$, with $\omega_j=j\Delta$,
+the same frequency-cell estimate bounds the spectral sums by
+\[
+ \Delta\sum_{j=1}^m(j\Delta)^dS_k(j\Delta)
+ \leq\|\omega^dS_k(\omega)\|_1+
+ \Delta\left\|\frac{\mathrm{d}(\omega^dS_k(\omega))}{\mathrm{d}\omega}\right\|_1,
+ \qquad d\in\{2j:0\leq j\leq r\}\cup\{b\}.
+\]
+Here the norms are over $[0,\infty)$. The right-hand side is uniformly
+bounded because $L\geq2R$ gives $\Delta\leq\pi/(4R)$.
+Taking $d=0,2,\ldots,2r$ therefore bounds the derivative variances at
+$x_-$, with the intercept adding its fixed variance at order zero.
+
+To control increments of the highest derivative, we use this estimate
+with $d=b=2r+2\zeta$. Each differentiated basis function is a sine or
+cosine with amplitude $L^{-1/2}\omega_j^r$, so
+$|\sin u-\sin v|\leq2^{1-\zeta}|u-v|^\zeta$ and the corresponding
+cosine inequality give
+\[
+ \left|\frac{\mathrm{d}^r\phi_{j,L}}{\mathrm{d}x^r}(x)-
+        \frac{\mathrm{d}^r\phi_{j,L}}{\mathrm{d}x^r}(x')\right|
+ \leq\frac{2^{1-\zeta}}{\sqrt L}
+       \omega_j^{r+\zeta}|x-x'|^\zeta.
+\]
+By independence of the Gaussian coefficients, the variance of the
+$r$th derivative increment is the sum of the squared basis increments
+above weighted by $S_k(\omega_j)$. The intercept cancels in increments when $r=0$ and
+contributes no derivative when $r\geq1$. Consequently,
+\[
+ \Var\left(\frac{\mathrm{d}^rF_{m,L}}{\mathrm{d}x^r}(x)-
+           \frac{\mathrm{d}^rF_{m,L}}{\mathrm{d}x^r}(x')\right)
+ \leq C_\zeta|x-x'|^{2\zeta}
+       \Delta\sum_{j=1}^m\omega_j^{2r+2\zeta}S_k(\omega_j),
+\]
+where $C_\zeta=2^{3-2\zeta}/\pi$ follows from $1/L=2\Delta/\pi$.
+The frequency-cell estimate at $d=b$ bounds the spectral sum on the
+right uniformly in $m,L$, giving the increment bound
+$A|x-x'|^{2\zeta}$ with $A$ independent of rank and padding.
+Fourier inversion gives the same bound for the underlying mean-square
+$r$th derivative, after increasing $A$ if needed. Gaussian moments
+then verify the Kolmogorov continuity criterion
+\citep{kallenberg2021foundations} with any exponent $p$ satisfying
+$p\zeta>1$.
+For $r=0$, this gives a continuous version of $W$. For $r\geq1$,
+integrating the continuous highest derivative, with the lower
+mean-square derivative values at $x_-$ as integration constants,
+recovers a version of $W$ by the mean-square fundamental theorem of
+calculus. Adding the intercept therefore gives a $C^r(I)$ version of $F$.
+
+\paragraph{Tightness and norm moments.}
+We next control both the size and the continuity of the sample paths
+uniformly over the finite models. These bounds establish tightness
+in $C^r(I)$ and provide the norm moments needed later for Wasserstein
+convergence and convergence of posterior summaries.
+Let $H$ denote either $\frac{\mathrm{d}^rF_{m,L}}{\mathrm{d}x^r}$ or
+$\frac{\mathrm{d}^rF}{\mathrm{d}x^r}$, and choose
+$p>\max(4,1/\zeta)$ and a H\"older exponent $0<\kappa<\zeta-1/p$.
+For $j\geq0$, let $M_j$ be the largest absolute increment of $H$
+between neighboring points on the mesh dividing $I$ into $2^j$
+equal cells. The Gaussian increment bound gives
+$\E[M_j^p]^{1/p}\leq C_p2^{-(\zeta-1/p)j}$ uniformly over the models,
+because the $p$th power of the maximum is bounded by the sum of the
+$p$th powers of the $2^j$ increments.
+Approximating arbitrary $x,x'\in I$ by points on successively finer
+meshes expresses $H(x)-H(x')$ through adjacent increments.
+This dyadic chaining argument bounds the H\"older seminorm by
+\[
+ [H]_\kappa
+ =\sup_{\substack{x,x'\in I\\x\ne x'}}
+      \frac{|H(x)-H(x')|}{|x-x'|^\kappa}
+ \leq C_{I,\kappa}\sum_{j=0}^{\infty}2^{\kappa j}M_j.
+\]
+Here $C_{I,\kappa}$ depends only on $I$ and $\kappa$.
+Minkowski's inequality therefore bounds $\E[[H]_\kappa^p]^{1/p}$
+by a constant times $\sum_{j\geq0}2^{-(\zeta-1/p-\kappa)j}$.
+Our choice of $\kappa$ makes this series converge, giving a uniform
+$p$th moment bound for the seminorm.
+
+The seminorm and the value $H(x_-)$ together bound the highest
+derivative everywhere on $I$. When $r\geq1$, repeated integration,
+starting from the lower derivative values at $x_-$, then bounds
+every lower derivative and the curve itself. For $r=0$, the first
+bound already controls the curve. The uniformly bounded Gaussian
+moments of these endpoint values consequently give
+\begin{equation}\label{eq:moments}
+ \sup_{m,L}\E[\|F_{m,L}\|_{C^r}^p]+\E[\|F\|_{C^r}^p]<\infty
+\end{equation}
+over the permitted ranks and padding. Since $p$ can be arbitrarily
+large, every polynomial norm moment is uniformly bounded.
+
+Bounds on derivative values of orders $0,\ldots,r$ at $x_-$ and on the highest
+derivative's H\"older seminorm define relatively compact subsets of
+$C^r(I)$ by Arzel\`a--Ascoli. The moment bounds and Markov's inequality
+allow these bounds to be chosen so that the finite priors assign
+arbitrarily high probability to such a set, uniformly over the models.
+This proves tightness. To identify the limit, the common mean and
+\cref{eq:covariance-bound} give convergence of the joint Gaussian laws
+of every finite collection of derivative values. Such evaluations on
+a countable dense subset of $I$ determine a $C^r(I)$ law, so every
+subsequential limit is the underlying prior. The finite priors
+therefore converge weakly to that law.
+
+\paragraph{Positive shape probability and a null boundary.}
+The boundary of $\mathcal C_r$ in $C^r(I)$ consists exactly of curves
+with $\min_I\frac{\mathrm{d}^rf}{\mathrm{d}x^r}=0$. Indeed, this minimum is continuous
+in the $C^r$ norm, and adding or subtracting a small multiple of
+$(x-c)^r/r!$ moves any such curve to either side of the event.
+We therefore need positive probability of nonnegativity and zero
+probability of equality. For each order, these follow by separating
+one Gaussian coordinate whose contribution to the selected derivative
+is positive throughout $I$.
+
+For $r=0$, the independent intercept gives
+\[
+ \min_{x\in I}F(x)=a_0+\min_{x\in I}W(x).
+\]
+Conditional on $W$, nonnegativity therefore imposes a finite lower
+threshold on the nondegenerate Gaussian $a_0$, giving positive
+conditional probability and zero conditional probability of equality.
+
+For $r\in\{1,2\}$, the intercept contributes no derivative. We instead
+seek a decomposition of $W$ into a Gaussian coefficient multiplying
+a deterministic function whose $r$th derivative is uniformly positive,
+together with an independent Gaussian process. This reduces the shape
+restriction to a scalar threshold, as in the finite model.
+The reproducing kernel Hilbert space (RKHS) $\mathcal H$ of $W$ in
+$C^r(I)$ identifies the deterministic directions that can be separated
+in this way.
+
+To construct a candidate direction, choose
+$0<\omega_-<\omega_+<\pi/(2R)$ and set
+\[
+ v_r(x)=\int_{\omega_-}^{\omega_+}S_k(\omega)
+             \cos(\omega(x-c)-r\pi/2)\,d\omega.
+\]
+Taking $r$ derivatives removes the phase shift, leaving the cosine
+factor $\cos(\omega(x-c))$. Because $|x-c|\leq R$ and
+$\omega_+R<\pi/2$, this factor is uniformly positive on the selected
+frequency band and throughout $I$. Thus
+\[
+ \frac{\mathrm{d}^rv_r}{\mathrm{d}x^r}(x)\geq
+ \cos(\omega_+R)\int_{\omega_-}^{\omega_+}\omega^rS_k(\omega)\,d\omega>0.
+\]
+
+We next verify that this direction belongs to $\mathcal H$, which
+justifies separating a Gaussian coefficient along it.
+The Fourier expression for the full-line RKHS norm gives squared norm
+$\pi\int_{\omega_-}^{\omega_+}S_k(\omega)\,d\omega<\infty$ for $v_r$,
+and restricting the function to $I$ cannot increase that norm.
+The RKHS obtained from the covariance on $I$ agrees with the RKHS
+of $W$ as a $C^r(I)$-valued Gaussian random element by
+\citet[Lemma 8.1]{vdv2008rkhs}, applied to the continuous, injective
+embedding into $C(I)$. The norm calculation therefore establishes
+$v_r\in\mathcal H$ in the function space used in this proof.
+
+Since $v_r$ is nonzero, we can normalize it by its RKHS norm.
+The Gaussian RKHS isometry \citep[Lemma 2.3]{vdv2008rkhs} then supplies
+a standard normal variable $\xi$, jointly Gaussian with $W$, such that
+$\E[\xi W(x)]=v_r(x)/\|v_r\|_{\mathcal H}$ for every $x\in I$.
+Define the remaining process $V$ by
+\[
+ W=\xi\frac{v_r}{\|v_r\|_{\mathcal H}}+V.
+\]
+Subtracting this component preserves $C^r(I)$ paths, and
+$\Var(\xi)=1$ gives $\Cov(\xi,V(x))=0$ for every $x\in I$.
+Joint Gaussianity therefore makes $\xi$ independent of the whole
+process $V$.
+
+Conditional on $V$, only the scalar coefficient $\xi$ remains random
+in the derivative constraint. Dividing each derivative inequality by
+the uniformly positive derivative of $v_r$ gives
+\[
+ \{F\in\mathcal C_r\}=
+ \left\{\xi\geq\|v_r\|_{\mathcal H}
+       \max_{x\in I}\frac{-\frac{\mathrm{d}^rV}{\mathrm{d}x^r}(x)}
+                              {\frac{\mathrm{d}^rv_r}{\mathrm{d}x^r}(x)}\right\}.
+\]
+For each path of $V$ the threshold is finite, so the conditional normal
+tail has positive probability and no atom at equality. Equality
+is precisely the zero-minimum event identified above, so the underlying
+shape event has positive probability and a null boundary at all three
+orders. The finite laws have the same properties by
+\cref{cor:positive,cor:monotone,cor:convex}, applied with
+likelihood one. In both cases, conditioning on nonnegativity therefore
+gives a strictly positive minimum selected derivative almost surely.
+
+\paragraph{Likelihood and shape conditioning.}
+Write $\mathcal L_{\boldsymbol y}(f)$ for the Gaussian density at
+$\boldsymbol y$ with mean $(f(x_1),\ldots,f(x_n))^T$ and covariance
+$\boldsymbol\Sigma$, taking $\mathcal L_{\boldsymbol y}(f)=1$ when
+$n=0$. This likelihood is bounded, positive, and continuous on
+$C^r(I)$. For any bounded continuous test function
+$\psi:C^r(I)\to\R$, the map
+\[
+ f\longmapsto\psi(f)\mathcal L_{\boldsymbol y}(f)
+                    \boldsymbol1_{\mathcal C_r}(f)
+\]
+is bounded and continuous outside $\partial\mathcal C_r$, where
+$\boldsymbol1_{\mathcal C_r}(f)$ is one if $f\in\mathcal C_r$ and
+zero otherwise. The preceding argument shows that this boundary
+has zero probability under the underlying prior, so the Portmanteau theorem
+\citep[Section 2]{billingsley1999convergence}
+gives convergence of the integrals of this map under the finite priors
+to its integral under the underlying prior.
+Taking $\psi\equiv1$ shows that the normalizing constants converge
+to a positive limit. Dividing by them gives convergence of posterior
+expectations of every bounded continuous $\psi$, which is conditioned
+weak convergence. The posterior densities relative to the priors are
+uniformly bounded along the sequence by the likelihood supremum
+divided by these constants, so
+\cref{eq:moments} also holds for the conditioned laws at every fixed
+polynomial order. Likelihood weighting preserves the zero boundary
+probability, giving the strictness assertion.
+
+\paragraph{Wasserstein convergence and posterior summaries.}
+We now strengthen conditioned weak convergence to convergence in
+Wasserstein distance. Index the chosen approximation sequence by
+$\ell$, with ranks $m_\ell$ and padding $L_\ell$. In this paragraph,
+write $F_\ell$ and $F$ for draws from the finite and underlying
+conditioned posteriors, respectively. Since $C^r(I)$ is separable
+and complete, the Skorokhod representation theorem
+\citep[Theorem 6.7]{billingsley1999convergence} allows these draws
+to be constructed on a common probability space, preserving their
+posterior laws, so that $\|F_\ell-F\|_{C^r}\to0$ almost surely.
+The uniform fourth-moment bounds established above make the squared
+norm differences uniformly integrable, so their expectations also
+converge to zero. Wasserstein distance takes the infimum over all
+couplings, and this particular coupling therefore gives
+\[
+ W_2^2\bigl(\Pi_{m_\ell,L_\ell,\boldsymbol y}^{\mathcal C_r},
+            \Pi_{\boldsymbol y}^{\mathcal C_r}\bigr)
+ \leq \E[\|F_\ell-F\|_{C^r}^2]\longrightarrow0,
+\]
+proving \cref{eq:wasserstein}.
+
+The same coupling controls posterior summaries uniformly in their
+input locations because the $C^r$ norm bounds every derivative through
+order $r$ over the whole interval. For each such order, the uniform
+difference of derivative means is at most
+$\E[\|F_\ell-F\|_{C^r}]$, which tends to zero by Cauchy--Schwarz.
+For any two derivative orders through $r$, expand the difference of
+their products by changing one factor at a time. The resulting
+difference of mixed second moments is bounded, uniformly on
+$I\times I$, by
+\[
+ \E[\|F_\ell-F\|_{C^r}(\|F_\ell\|_{C^r}+\|F\|_{C^r})].
+\]
+Cauchy--Schwarz bounds this expectation by the product of
+$\E[\|F_\ell-F\|_{C^r}^2]^{1/2}$, which tends to zero, and
+$\E[(\|F_\ell\|_{C^r}+\|F\|_{C^r})^2]^{1/2}$, which remains bounded.
+Thus the mixed second moments converge uniformly. Subtracting the
+uniformly convergent products of means proves covariance convergence.
+Since the sequence was arbitrary, all these conclusions hold in the
+full stated limiting regime.
+\end{proofEnd}

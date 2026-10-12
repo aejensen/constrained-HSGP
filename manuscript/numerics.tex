@@ -1,0 +1,395 @@
+\section{Numerical evaluation}\label{app:numerical-evaluation}\label{sec:numerics}
+
+The posterior construction requires three numerical operations. We
+first prepare the ordinary Gaussian posterior, then evaluate the
+shape threshold whenever the sampler proposes a coefficient vector,
+and finally draw the omitted coefficient conditionally on each
+retained vector. The Gaussian preparation is performed once, whereas
+threshold evaluation is repeated throughout sampling. The main
+numerical issue is therefore to bound a maximum over the entire
+constraint interval reliably and to use the same bound in the
+marginal density and conditional reconstruction.
+
+\subsection{Gaussian preparation and the common algorithm}
+\label{subsec:gaussian-preparation}
+
+The preparation separates the coefficients that will be sampled
+from the scalar that will be integrated out. Let $\boldsymbol A$ be
+the invertible linear map from the original coefficients to
+$(\boldsymbol g,\gamma)$ under the applicable conditions in
+\cref{cor:positive,cor:monotone,cor:convex}, or the common map in
+\cref{cor:combinations} for a joint restriction. The ordinary posterior
+then has mean $\boldsymbol A\boldsymbol m$ and covariance
+$\boldsymbol A\boldsymbol V\boldsymbol A^T$. Denote the mean blocks
+by $\boldsymbol m_g$ and $m_\gamma$, the marginal covariance of
+$\boldsymbol g$ by $\boldsymbol V_g$, the variance of $\gamma$ by
+$v_\gamma$, and their cross-covariance by
+$\boldsymbol v=\Cov(\boldsymbol g,\gamma\mid\boldsymbol y)$.
+Gaussian conditioning gives
+\begin{equation}\label{eq:gaussian-blocks}
+ \mu(\boldsymbol g)=m_\gamma+
+      \boldsymbol v^T\boldsymbol V_g^{-1}(\boldsymbol g-\boldsymbol m_g),
+ \qquad s^2=v_\gamma-\boldsymbol v^T\boldsymbol V_g^{-1}\boldsymbol v.
+\end{equation}
+These formulas give the conditional mean and variance of $\gamma$
+for any value of $\boldsymbol g$. To put the sampled coefficients
+on a common Gaussian scale, choose an invertible factor
+$\boldsymbol B\boldsymbol B^T=\boldsymbol V_g$ and set
+$\boldsymbol g(\boldsymbol z)=\boldsymbol m_g+\boldsymbol B\boldsymbol z$.
+Then \cref{eq:gaussian-blocks} gives
+$\mu(\boldsymbol g(\boldsymbol z))=m_\gamma+\boldsymbol\lambda^T\boldsymbol z$,
+where $\boldsymbol\lambda=\boldsymbol B^{-1}\boldsymbol v$ is
+computed by a linear solve. Under the ordinary posterior,
+$\boldsymbol z$ has a standard normal distribution. The shape
+restriction then enters through the survival weight in
+\cref{eq:whitened-target}.
+
+When computing $s^2$, subtracting two nearly equal terms in
+\cref{eq:gaussian-blocks} can lose precision. The equivalent formula
+$s^2=(\boldsymbol d^T\boldsymbol V^{-1}\boldsymbol d)^{-1}$,
+where $\boldsymbol d$ is the column of $\boldsymbol A^{-1}$
+corresponding to $\gamma$, avoids this subtraction.
+The quadratic form is the $\gamma$ diagonal entry of the transformed
+precision matrix and can be evaluated using the factored posterior
+precision without forming $\boldsymbol V^{-1}$ explicitly.
+
+The ordinary Gaussian posterior can itself be prepared using matrix
+factorizations and linear solves. For a general noise covariance
+$\boldsymbol\Sigma$, solves with its Cholesky factor transform the
+observation errors to have identity covariance. We apply the same transformation
+to the design and to the response centered at
+$\boldsymbol X\boldsymbol m_0$, then scale the design columns by
+the prior standard deviations. In these coordinates, the prior
+precision is the identity. Stacking the transformed design above an
+identity matrix and applying a QR factorization therefore gives a
+triangular factor of the posterior precision. Linear solves supply
+the posterior mean and covariance factors, after which the full
+transformation $\boldsymbol A\boldsymbol V\boldsymbol A^T$
+preserves the dependence introduced by the coefficient map.
+
+\cref{alg:posterior} separates the repeated marginal-density
+evaluation from reconstruction after sampling. Both stages use the
+same threshold rule, tolerance, and precision policy, so they describe
+the same conservative conditioning event. A gradient-based sampler
+also needs a vector to guide its proposals, called the force below.
+We obtain it from the envelope derivative in
+\cref{subsec:threshold-derivatives}, which differentiates the
+maximized objective without differentiating the numerical search
+for its maximizing location.
+
+\begin{algorithm}[htbp]
+\caption{Sign-constrained marginal sampling and reconstruction.
+For a joint event satisfying \cref{prop:joint}, use its common
+coefficient map and replace $\tau_r$ by $\tau_A^\varepsilon$
+throughout, including the upper threshold used in both stages.}
+\label{alg:posterior}
+\begin{algorithmic}[1]
+\Require Gaussian model, event $\mathcal C_r$ or $\mathcal C_A^\varepsilon$, admissible map, interval $I$
+\Require Absolute tolerance $\delta>0$ and precision budget
+\State Form the ordinary posterior and apply the invertible shape-specific map
+\State Prepare $\boldsymbol m_g,\boldsymbol B,m_\gamma,\boldsymbol\lambda,s$
+\Function{Marginal evaluation}{$\boldsymbol z$}
+ \State Set $\boldsymbol g=\boldsymbol m_g+\boldsymbol B\boldsymbol z$
+ \State Set $\mu=m_\gamma+\boldsymbol\lambda^T\boldsymbol z$
+ \State Bound $\tau_r(\boldsymbol g)$ between $\ell$ and $u$ with $u-\ell\leq\delta$, or report failure
+ \State Set $\widetilde\tau_r=u$ and $\widetilde\alpha=(\widetilde\tau_r-\mu)/s$
+ \State Return $-\|\boldsymbol z\|^2/2+\log\Phi^{\mathrm c}(\widetilde\alpha)$ and the envelope force
+\EndFunction
+\State Use the marginal sampler to retain draws of $\boldsymbol z$
+\For{each retained $\boldsymbol z$}
+ \State Set $\boldsymbol g=\boldsymbol m_g+\boldsymbol B\boldsymbol z$ and $\mu=m_\gamma+\boldsymbol\lambda^T\boldsymbol z$
+ \State Evaluate the same upper-threshold rule and set $\widetilde\alpha=(\widetilde\tau_r-\mu)/s$
+ \State Draw $U\sim\operatorname{Uniform}(0,1)$ independently
+ \State Compute $\eta=-\Phi^{-1}(U\Phi^{\mathrm c}(\widetilde\alpha))$ using log probabilities
+ \State Set $\gamma=\widetilde\tau_r+s(\eta-\widetilde\alpha)$ and invert the coefficient map
+ \State Evaluate the reconstructed curve and requested functionals
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Conservative threshold evaluation}
+\label{subsec:threshold-computation}
+
+The threshold is a maximum over the entire constraint interval.
+Evaluating its objective at finitely many locations gives a lower
+bound, while an upper bound must also control values between those
+locations. The calculation therefore maintains both bounds and
+refines them until their difference is within the requested tolerance.
+
+\paragraph{Bounds used for conditioning.}
+The routine takes the remaining coefficients in their declared order,
+the shape case and basis geometry, a positive absolute tolerance
+$\delta$ in coefficient units, and an arithmetic precision limit.
+A successful evaluation returns
+\[
+ \ell\leq\tau_r(\boldsymbol g)\leq u,
+ \qquad u-\ell\leq\delta,
+\]
+together with an approximate maximizing location for the envelope
+force. Choosing $\widetilde\tau_r=u$ then ensures
+$0\leq\widetilde\tau_r-\tau_r\leq\delta$. The resulting lower bound on
+$\gamma$ can be slightly too large, but cannot admit a curve that
+violates the constraint. If the requested enclosure cannot be
+obtained, the routine reports failure.
+
+\paragraph{Locating and evaluating extrema.}
+For each individual constraint, the maximum occurs at an endpoint
+or an interior stationary location.
+\cref{cor:positive,cor:monotone,cor:convex} express the interior
+candidates as roots of a polynomial in the cosine coordinate $w\in J$.
+Real-root isolation finds disjoint intervals containing every
+distinct real root and establishes that none have been omitted
+\citep{johansson2017arb}. The represented coefficients are treated as
+exact rationals, allowing repeated factors to be removed before
+isolation while retaining roots of even multiplicity. This arithmetic
+also detects reduced degree without discarding small nonzero
+coefficients. A constant stationary polynomial requires only endpoint
+evaluations, including when it is identically zero.
+
+Interval arithmetic then encloses the objective at the endpoints
+and over each root interval. Rounding is directed outward so that
+these enclosures include arithmetic error. The largest candidate
+upper bound gives $u$, while valid lower bounds come from endpoints
+and roots known to belong to $J$. Refining the candidate enclosures
+reduces the gap between these bounds until it is at most $\delta$.
+
+Roots near the boundary of $J$ need additional care. A root interval
+known to lie outside $J$ is discarded. One crossing the boundary
+remains an upper-bound candidate, but supplies a lower bound only
+after its root is shown to belong to $J$. The calculation can still
+stop without resolving that location if the overall gap is already
+within $\delta$. For quotient objectives, division also requires a
+strictly positive interval lower bound for the denominator.
+
+\paragraph{Evaluation for the individual constraints.}
+For positivity, isolate the roots of $P_{0,\boldsymbol g}$ and
+evaluate the objective $-f_{\boldsymbol g}$ over the corresponding
+physical locations. Interval evaluation of this trigonometric
+expression encloses the candidate values.
+
+For monotonicity, the objective is $-P_{\boldsymbol g}/D$, with
+stationary polynomial
+\[
+ \frac{\mathrm{d}P_{\boldsymbol g}}{\mathrm{d}w}D
+ -P_{\boldsymbol g}\frac{\mathrm{d}D}{\mathrm{d}w}.
+\]
+The polynomials in \cref{eq:monotone-polynomials} use every spectral
+coefficient, with $g_2=0$ and the intercept excluded, and satisfy
+$D\geq1$ on $J$. The lidar implementation first bounds the equivalent
+trigonometric expression, retaining all harmonics, and uses root
+isolation as a fallback.
+
+For convexity, the polynomial objective $Q_{\boldsymbol g}$ can be
+bounded before finding its stationary points. Map $J$ affinely to
+$[0,1]$ and express the polynomial in the Bernstein basis. These
+basis functions are nonnegative and sum to one, so every polynomial
+value is a weighted average of the coefficients and lies between
+their smallest and largest values. Ball arithmetic, which represents
+each quantity by a midpoint and an error radius, encloses the change
+of basis and the cosine endpoints.
+
+De Casteljau subdivision rewrites the polynomial on smaller
+intervals, with outward rounding preserving the bounds. Repeatedly
+subdividing the interval with the largest upper bound refines $u$,
+while endpoint and midpoint evaluations improve $\ell$.
+If the gap still exceeds $\delta$ when the subdivision budget is
+reached, isolate the roots of the exact rational derivative of
+$Q_{\boldsymbol g}$ and increase arithmetic precision as needed.
+
+\paragraph{Joint restrictions.}
+For a signed joint event, use a common coefficient map satisfying
+\cref{prop:joint}. Every selected order then shares the same direction
+$h$ and remaining coefficients $\boldsymbol g$, so its quotient
+objective must be formed from \cref{eq:joint-threshold} under this map.
+Subdivide $I$ and bound each quotient on every subinterval, verifying
+a positive lower bound for its signed denominator before division.
+Evaluations at points in $I$ supply lower bounds.
+
+If $[\ell_r,u_r]$ encloses the maximum for order $r\in A$, then
+\[
+ \max_{r\in A}\ell_r
+ \leq\tau_A^\varepsilon(\boldsymbol g)
+ \leq\max_{r\in A}u_r.
+\]
+The width of this joint enclosure is at most
+$\max_{r\in A}(u_r-\ell_r)$, so requiring each width to be at most
+$\delta$ suffices. The reductions in
+\cref{cor:combinations,tab:constraint-combinations} replace some
+continuum searches by endpoint evaluations. Enclose each retained
+maximum and endpoint quotient with outward rounding, then take the
+maxima of their lower and upper bounds. The same width guarantee
+applies. The positive--convex and negative--concave pairs retain the
+continuum value threshold $M_0$ alongside the curvature threshold
+$M_2$.
+
+\paragraph{Precision and error control.}
+These guarantees concern the numerical coefficients and geometry
+supplied to the routine, treated as exact inputs. They exclude errors
+from the preceding Gaussian preparation. Applying \cref{prop:error}
+requires the threshold-error bound to hold almost everywhere under
+the ordinary Gaussian law.
+
+Fixing the precision policy and the rules for choosing among
+candidate locations makes repeated evaluation deterministic.
+Nonfinite inputs and enclosures unresolved at the precision limit
+are reported as failures. The Gaussian survival weight is positive
+at every finite coefficient vector, so assigning zero density to an
+unresolved evaluation would impose an additional restriction.
+Such failures therefore cannot be silently treated as rejected
+coefficient values.
+
+\subsection{Threshold derivatives}
+\label{subsec:threshold-derivatives}
+
+Gradient-based sampling requires the derivative of the log marginal
+density with respect to the sampled coefficients. The shape restriction
+enters through the Gaussian survival weight in
+\cref{eq:whitened-target}, so this calculation depends on how the
+threshold changes with the coefficients. The maximum representation
+of the threshold gives these derivatives from its maximizing locations,
+without differentiating the numerical search used to find them.
+
+\paragraph{Slopes at maximizing locations.}
+At a fixed $x$, the threshold objective is linear in
+$\boldsymbol g$. Under \cref{thm:finite}, write
+\[
+ \tau_r(\boldsymbol g)
+ =\max_{x\in I}\boldsymbol\beta_r(x)^T\boldsymbol g,
+\]
+where $\boldsymbol\beta_r(x)$ contains the coefficient multipliers,
+ordered as the entries of $\boldsymbol g$. The positive denominator
+and compact interval make this vector continuous and bounded in $x$.
+Consequently, $\tau_r$ is convex, positively homogeneous, and
+Lipschitz, with Lipschitz constant at most
+$\max_{x\in I}\|\boldsymbol\beta_r(x)\|$.
+
+Let $\mathcal A_r(\boldsymbol g)$ denote the locations attaining
+the maximum, which we call active locations.
+For a perturbation in a direction $\boldsymbol b\in\R^m$,
+Danskin's theorem \citep[Exercise 6.7]{bertsekas2010convexchapter}
+gives
+\[
+ \left.\frac{\mathrm{d}}{\mathrm{d}u}
+       \tau_r(\boldsymbol g+u\boldsymbol b)\right|_{u=0+}
+ =\max_{x\in\mathcal A_r(\boldsymbol g)}
+       \boldsymbol\beta_r(x)^T\boldsymbol b.
+\]
+The theorem applies because $I$ is compact and the coefficient
+gradients are continuous. Its formula compares the slopes at the
+currently maximizing locations and takes the largest slope in the
+chosen direction.
+
+The subdifferential consists of all convex combinations of the active
+vectors $\boldsymbol\beta_r(x)$. A gradient exists exactly when all
+these vectors agree, in which case their common value is the column
+gradient. Thus a unique maximizing location suffices for
+differentiability. Several locations also permit a gradient if they
+give the same vector, while different active vectors produce a kink.
+
+\paragraph{Individual and joint constraints.}
+For the individual constraints, the coefficient vectors follow
+directly from the objectives in
+\cref{cor:positive,cor:monotone,cor:convex}. With
+$w(x)=\cos(\omega_1(x-c+L))$, their spectral components are
+\[
+ \begin{aligned}
+  \beta_{0,j}(x)&=-\phi_{j,L}(x),
+       &&1\leq j\leq m,\\
+  \beta_{1,j}(x)&=-jT_j(w(x))/D(w(x)),
+       &&1\leq j\leq m,\quad j\ne2,\\
+  \beta_{2,j}(x)&=j^2U_{j-1}(w(x)),
+       &&2\leq j\leq m.
+ \end{aligned}
+\]
+The intercept components in the monotonicity and convexity coordinates
+are zero. Where the threshold is differentiable, these formulas
+evaluate its gradient at any maximizing location.
+
+For the joint threshold in \cref{prop:joint}, form the vectors from
+the common coefficient map so that
+$\eta_r(x;\boldsymbol g)=\boldsymbol\beta_r(x)^T\boldsymbol g$.
+An active candidate is now a pair $(r,x)$ attaining the joint
+threshold. The directional derivative is the largest
+$\boldsymbol\beta_r(x)^T\boldsymbol b$ among these pairs, and a
+gradient exists exactly when their vectors agree. This includes ties
+between different derivative orders. The reductions in
+\cref{cor:combinations} preserve the threshold, so the same calculation
+can use the retained continuum objectives and endpoint quotients.
+
+\paragraph{Gradient of the marginal log density.}
+Let $q_r(\boldsymbol z)$ be the exact conditioned density in whitened
+coordinates from \cref{eq:whitened-target}. Define the standardized
+threshold by
+\[
+ \alpha_r(\boldsymbol z)
+ =\frac{\tau_r(\boldsymbol g(\boldsymbol z))
+          -\mu(\boldsymbol g(\boldsymbol z))}{s},
+\]
+and let $\varphi_1$ denote the standard normal density.
+At a point where the active coefficient vectors agree, choose any
+maximizing location $x_\star$. The map
+$\boldsymbol g(\boldsymbol z)=\boldsymbol m_g+\boldsymbol B\boldsymbol z$
+transforms the threshold gradient to
+$\boldsymbol B^T\boldsymbol\beta_r(x_\star)$, while the conditional
+mean has gradient $\boldsymbol\lambda$. The chain rule therefore gives
+the column gradients
+\begin{equation}\label{eq:target-gradient}
+ \begin{aligned}
+ \frac{\partial\alpha_r}{\partial\boldsymbol z}
+   &=\frac{\boldsymbol B^T\boldsymbol\beta_r(x_\star)-\boldsymbol\lambda}{s},\\
+ \frac{\partial\log q_r}{\partial\boldsymbol z}
+   &=-\boldsymbol z-
+       \frac{\varphi_1(\alpha_r)}{\Phi^{\mathrm c}(\alpha_r)}
+       \frac{\partial\alpha_r}{\partial\boldsymbol z}.
+ \end{aligned}
+\end{equation}
+The term $-\boldsymbol z$ comes from the standard normal density,
+while the second term differentiates the log survival probability.
+Its weight $\varphi_1(\alpha_r)/\Phi^{\mathrm c}(\alpha_r)$ is the
+inverse Mills ratio. The gradient of $\alpha_r$ accounts for changes
+in both the threshold and the conditional mean of $\gamma$.
+
+\paragraph{The numerical force.}
+The numerical adapter selects an approximate maximizing location
+deterministically, evaluates $\boldsymbol\beta_r$ there, and uses
+$\widetilde\alpha=(\widetilde\tau_r-\mu)/s$ in the normal-tail factor.
+Substituting these quantities in the envelope formula gives the force
+used by the sampler.
+
+The threshold tolerance controls objective values, but locations with
+almost equal values can have substantially different coefficient
+slopes. A narrow enclosure of the maximum therefore does not guarantee
+an accurate force near a change of maximizing location. The numerical
+log density uses the upper threshold, so the returned envelope force need
+not be its exact gradient. \cref{app:stan-implementation} explains how
+this force is used in sampling.
+
+\subsection{Stable tail evaluation and reconstruction}
+\label{subsec:tail-computation}
+
+When the threshold lies far above the scalar conditional mean, its
+Gaussian survival probability can be extremely small. Computing
+$1-\Phi(\alpha)$ can then lose precision or return zero, even
+though the probability is positive. We instead evaluate
+$\log\Phi^{\mathrm c}(\alpha)$ directly as $\log\Phi(-\alpha)$ using a
+normal log-tail routine. The inverse Mills ratio
+in \cref{eq:target-gradient} is then
+$\exp(\log\varphi_1(\alpha)-\log\Phi^{\mathrm c}(\alpha))$.
+
+For reconstruction, draw $U\sim\operatorname{Uniform}(0,1)$
+independently and use a normal quantile routine that accepts log
+probabilities to solve
+\[
+ \log\Phi(-\eta)=\log U+\log\Phi^{\mathrm c}(\widetilde\alpha).
+\]
+In exact arithmetic this gives $\eta>\widetilde\alpha$ for
+$0<U<1$, and
+$\gamma=\widetilde\tau_r+s(\eta-\widetilde\alpha)$ equals the
+truncated-normal draw in \cref{eq:reconstruction} with the upper
+threshold substituted. Expressing the draw relative to the threshold
+is useful when the conditional mean and a large positive normal
+quantile would nearly cancel. A nonfinite quantile or a
+computed $\eta<\widetilde\alpha$ is a reconstruction failure.
+These arithmetic safeguards do not extend \cref{prop:error} to
+rounding in Gaussian preparation or tail evaluation, since that
+bound assumes exact Gaussian and tail operations.

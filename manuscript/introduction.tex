@@ -1,0 +1,162 @@
+\section{Introduction}\label{sec:introduction}
+
+Scientific information about a response often concerns its sign or how
+it changes over an interval. Positivity restricts the response itself,
+while monotonicity and convexity restrict its slope and curvature when
+the corresponding derivatives exist. These properties need not be
+visible in noisy observations, so a Gaussian process (GP) that describes
+the data closely can still assign probability to curves that conflict
+with the proposed scientific model. We therefore seek a posterior law
+that imposes the restriction throughout a specified interval while
+retaining joint uncertainty about the response and its derivatives.
+
+The Hilbert space GP (HSGP) approximation of \citet{solin2020hsgp}
+represents the process by a finite expansion in Laplacian eigenfunctions
+on an interval extending beyond the region of interest. This extension,
+called padding, is used to reduce boundary effects, while the rank,
+or number of retained functions, controls the finest variation represented
+for a given computational interval \citep{riutort2023practicalhsgp}.
+The basis functions are independent of the covariance kernel and its
+parameters. The kernel enters through spectral values that determine
+Gaussian coefficient variances, allowing the same basis and its analytic
+derivatives to be reused across covariance specifications.
+Shape restrictions, however, concern
+the entire curve obtained by summing the oscillatory basis functions.
+Their validity is not determined by the signs of the individual
+coefficients, and checking a finite set of locations can miss a
+violation between them. The question addressed here is how to
+condition this spectral model on the complete interval restriction
+while retaining its basis and kernel-derived Gaussian coefficient law.
+
+Our construction begins with positivity. A random intercept shifts
+the whole curve above zero when it exceeds the negative minimum of
+the spectral part. The same argument extends to monotonicity and
+convexity whenever the retained span contains a direction with a
+uniformly positive selected derivative, because a sufficiently large
+coefficient along that direction makes the full curve satisfy the
+restriction for any fixed values of the remaining coefficients. Thus the
+continuum event becomes a lower bound on one Gaussian coefficient,
+with a threshold determined by the remaining coefficients. Under
+Gaussian observations, integrating out that coefficient gives an
+explicit marginal posterior weighted by a normal survival probability.
+A subsequent draw from its truncated conditional normal restores
+the full conditioned law. This representation makes continuum
+conditioning available within the HSGP expansion without
+changing the probability model through a nonlinear transformation
+of the curve.
+
+\subsection{Related work and contributions}
+
+Global derivative restrictions and derivative inference have precedents
+in Bayesian regression, where piecewise-linear isotonic models permit
+flat and increasing segments \citep{neelon2004isotonic}, while smooth
+parameterizations and regression splines give other monotone priors
+\citep{shively2009monotone}. Ordered Bernstein coefficients combine
+global monotonicity with variable selection or clustering
+\citep{curtis2011bernstein,wilson2020monotone}, with the aerosol analysis
+of \citet{wilson2020monotone} illustrating derivative inference through
+the derivative of a monotone differential-pressure curve.
+For convex regression, maxima of random affine functions address
+multivariate inputs and permit nonsmooth surfaces
+\citep{hannah2011convex}, for which support and posterior consistency
+results are available. Integrating squared GPs provides smooth
+shape restrictions \citep{lenk2017shape}, with spectral constructions
+also available for grouped data \citep{lenk2024hierarchical}.
+These approaches establish that global shape information and
+derivative inference can be incorporated in Bayesian regression in
+several ways. They also make the choice of probability model
+substantive: transforming or integrating a GP generally gives a
+different law from conditioning a specified Gaussian model on a
+shape event.
+
+The closest constructions condition finite Gaussian expansions
+using bases chosen to express global shape restrictions as coefficient
+inequalities \citep{maatouk2017constraints}. These constraints hold
+throughout the domain, and subsequent work develops general linear
+inequalities, noisy observations, multiple constraints, and smooth
+bases \citep{lopera2018finite,lopera2020noisy,maatouk2025bayesian}.
+Within this line of work, \citet{ray2020shaperestricted} combine
+smooth relaxations of coefficient constraints with elliptical slice
+sampling and circulant embedding, while Gaussian simulation on
+correlated subdomains addresses larger problems
+\citep{maatouk2025largescale}. Our construction shares the aim of
+conditioning a finite Gaussian model on a global restriction. Its
+distinctive task is to characterize that restriction in the
+Laplacian--Dirichlet spectral space, whose oscillatory basis requires
+a different description of the constraint.
+
+Other GP approaches impose derivative signs at virtual locations
+\citep{riihimaki2010monotonicity,agrell2019operators}, use randomized
+optimization for constrained inference \citep{zhang2026rlrto}, or
+project GP curves onto the monotone-function space
+\citep{lin2014projection}. Virtual-location restrictions provide a
+finite description of the constraint, whereas projection defines
+the fitted curve by a separate map. Here the target is the Gaussian
+regression posterior conditioned on the complete continuum event
+in the retained spectral space. The scalar threshold describes
+that event exactly, so its numerical evaluation can be studied
+separately from the choice of conditioning target.
+
+The first contribution is a common representation for positivity,
+monotonicity, and convexity, together with explicit directions and
+sufficient rank and padding conditions for each case. Sign reversal
+gives the corresponding nonpositive, nonincreasing, and concave
+models. The representation also applies to joint restrictions whenever
+the retained span contains a direction with the required signs at all
+selected derivative orders. We give conditions on the HSGP direction
+coefficients and threshold reductions covering all 26 combinations
+without opposing constraints.
+
+To evaluate the thresholds for the individual constraints, a cosine
+transformation reduces the search for stationary
+locations to polynomial equations, with endpoints, repeated roots,
+and constant cases included. These characterizations make the
+thresholds amenable to global evaluation. The resulting marginal
+posterior is strongly log-concave in whitened coordinates, and a
+total variation bound quantifies the change in its reconstructed
+law when a conservative numerical threshold is used. The
+computational cost is a global maximization at each target evaluation,
+so the representation offers an alternative to bases with direct
+coefficient inequalities, rather than a general efficiency advantage.
+
+The second contribution connects finite continuum conditioning to
+conditioning the underlying GP. Covariance approximation alone does
+not settle this question because the indicator of a sign event is
+discontinuous at curves that touch its boundary. For each individual
+constraint, we establish a null boundary and control function-space
+moments, obtaining quadratic Wasserstein convergence of the
+conditioned posterior as padding and frequency cutoff grow. Under
+the stated spectral regularity, convergence holds in the uniform
+norm for the response and all derivatives up to the constrained
+order. It therefore also gives uniform convergence of their posterior
+means and covariance functions. The result includes Mat\'ern
+smoothness greater than zero for positivity, greater than one for
+monotonicity, and greater than two for convexity.
+
+Two applications show why retaining joint uncertainty about the
+response and its derivatives matters. Under the differential
+absorption lidar approximation, mercury concentration is proportional
+to the range derivative of a latent negative log signal ratio, so
+nonnegative concentration requires that curve to be nondecreasing.
+For leaf light-response data, concavity instead encodes a nonincreasing
+marginal gain in assimilation as irradiance increases, without
+requiring assimilation itself to increase throughout the range.
+These analyses illustrate how a scientifically specified shape
+restriction changes derivative inference.
+
+This paper is organized as follows. \cref{sec:methodology} introduces the
+spectral model and its conditioning events, followed by the Gaussian
+coefficient construction for positivity, monotonicity, convexity, and
+their joint combinations in \cref{sec:methods}. \cref{sec:theory} studies
+posterior geometry, numerical conditioning error, and convergence to the
+conditioned underlying GP, and \cref{sec:computation} describes posterior
+computation. \cref{sec:applications} presents the mercury lidar and leaf
+light-response applications, followed by the discussion in
+\cref{sec:discussion}.
+\ifdefined\CombinedInlineProofs\else
+All proofs are given in the supplementary material.
+\fi
+
+Stan implementations of the monotone and convex models, together with
+R code for reproducing the two applications, are available from the
+author's GitHub repository.

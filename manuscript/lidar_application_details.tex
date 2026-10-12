@@ -1,0 +1,40 @@
+\section{Lidar application details}
+\label{app:lidar-computation}
+
+\subsection{Computation}
+
+For the model in \cref{sec:lidar}, computation subtracts the observed
+response mean and divides by the response range, applying the same
+change of scale to the Gaussian model. The global-threshold tolerance
+is $10^{-12}$ in these transformed coefficient units. An expectation
+propagation approximation at $129$ derivative locations supplies the
+initial mean and dense proposal metric. The continuum threshold
+still determines every target evaluation, so these locations affect
+only initialization and the metric.
+
+Four Stan chains each use $400$ warm-up iterations and $2{,}000$
+retained draws, without thinning. During warm-up, the step size adapts
+to target acceptance $0.9$ while the supplied metric is held fixed.
+The maximum tree depth is $10$ during warm-up and $12$ during
+retained sampling, which otherwise uses the resulting tuning.
+
+\paragraph{MCMC diagnostics.}
+We monitor the sampling coordinates and reconstructed coefficients,
+the latent response and concentration at the observed ranges, their
+adjacent midpoints, and five equally spaced locations, together with
+the total response increase, prior quadratic form, and log density.
+Across these $1{,}146$ scalar quantities, the maximum rank-normalized
+split $\widehat R$ is $1.0034$, and the minimum bulk and tail effective
+sample sizes are $2{,}776$ and $2{,}479$, respectively. None of the
+$8{,}000$ retained iterations has a divergence or reaches the
+tree-depth limit, and the minimum energy Bayesian fraction of missing
+information (E-BFMI) across chains is $0.9637$. Three divergences
+occurred during warm-up, whose draws were discarded. The retained-draw
+diagnostics reveal no warning about mixing in the monitored quantities,
+while the predictive checks below assess agreement with the observation
+model.
+
+\subsection{Predictive checks}
+
+\input{lidar_criticism.tex}
+\FloatBarrier

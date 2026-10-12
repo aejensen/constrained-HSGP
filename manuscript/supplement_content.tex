@@ -1,0 +1,25 @@
+\section{Proofs and supporting results}\label{app:proofs}
+\ifdefined\CombinedInlineProofs\else
+\subsection{Gaussian conditioning and its specializations}
+\printProofs[finite]
+\printProofs[positive]
+\printProofs[monotone]
+\printProofs[convex]
+\printProofs[joint]
+\subsection{Conservative threshold error}
+\printProofs[error]
+\subsection{Conditioned posterior approximation}
+\printProofs[approximation]
+\fi
+\subsection{Signed combinations in the Laplacian expansion}\label{app:joint-combinations}
+\input{theory/combinations.tex}
+\input{constraint_combinations_table.tex}
+\input{theory/supporting.tex}
+\FloatBarrier
+\input{numerics.tex}
+\FloatBarrier
+\input{stan.tex}
+\FloatBarrier
+\input{lidar_application_details.tex}
+\FloatBarrier
+\input{leaf_application_details.tex}

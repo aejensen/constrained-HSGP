@@ -1,0 +1,51 @@
+\begin{theoremEnd}[combined main,category=error]{proposition}[Posterior error from a conservative continuum threshold]
+\CombinedResultCheck{prop:error}{proposition}\label{prop:error}
+Under \cref{thm:finite}, let $\widetilde\tau_r$ be measurable and satisfy
+$\tau_r\leq\widetilde\tau_r\leq\tau_r+\delta$ almost everywhere
+under the ordinary posterior of $\boldsymbol g$, for a fixed $\delta\geq0$.
+Use the same upper threshold in marginal weighting and reconstruction.
+Let $P_{\boldsymbol y}$ be the ordinary coefficient posterior, and use
+$\mathcal C_r$ also for its coefficient preimage. Define
+$\widetilde{\mathcal C}_r=\{\gamma\geq\widetilde\tau_r(\boldsymbol g)\}$.
+Both conditioned laws exist and, with $\TV(P,Q)=\sup_A|P(A)-Q(A)|$,
+\begin{equation}\label{eq:tv}
+ \begin{split}
+ \TV\bigl(P_{\boldsymbol y}(\cdot\mid\widetilde{\mathcal C}_r),
+          P_{\boldsymbol y}(\cdot\mid\mathcal C_r)\bigr)
+ &=1-\frac{P_{\boldsymbol y}(\widetilde{\mathcal C}_r)}
+                 {P_{\boldsymbol y}(\mathcal C_r)}
+ \leq\min\left(1,\frac{\delta}
+ {s\sqrt{2\pi}P_{\boldsymbol y}(\mathcal C_r)}\right).
+ \end{split}
+\end{equation}
+Every measurable summary of the reconstructed coefficients inherits
+this bound. The identity holds for any inner event of positive probability.
+\end{theoremEnd}
+\begin{proofEnd}
+\CombinedProofCheck{prop:error}
+Fix the ordinary Gaussian law, selected order, and almost-everywhere
+error condition of \cref{prop:error}, modifying the numerical threshold
+on the exceptional null set if necessary. Finite thresholds and $s>0$
+give positive conditional tails, so both conditioning events have
+positive probability. To compare the resulting laws, put
+$A=\mathcal C_r$ and $B=\widetilde{\mathcal C}_r$. If the omitted
+mass is zero, both conditioned laws agree. Otherwise the law on $A$
+is a mixture of the laws on $B$ and $A\setminus B$, with weights
+$P_{\boldsymbol y}(B)/P_{\boldsymbol y}(A)$ and its complement.
+The components have disjoint supports, so total variation equals the
+second weight, establishing the identity for any positive-probability
+inner event.
+
+For the threshold events considered here, conditional
+Gaussian integration identifies the omitted mass as
+\[
+ \E\left[\Phi((\widetilde\tau_r(\boldsymbol g)-\mu(\boldsymbol g))/s)
+          -\Phi((\tau_r(\boldsymbol g)-\mu(\boldsymbol g))/s)
+          \mid\boldsymbol y\right].
+\]
+Since the conditional density is at most $1/(s\sqrt{2\pi})$ and the
+excluded interval has length at most $\delta$, dividing this mass
+bound by the probability of the exact event proves \cref{eq:tv}.
+The invertible coefficient map preserves total variation, while
+measurable summaries cannot increase it, proving the remaining assertion.
+\end{proofEnd}

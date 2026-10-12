@@ -1,0 +1,49 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx,booktabs,minted,float,placeins,needspace,algorithm,algpseudocode}
+\usepackage{array,longtable}
+\usepackage[round,authoryear]{natbib}
+\usepackage[commandRef=cref]{proof-at-the-end}
+\usepackage{xr-hyper}
+\usepackage[hidelinks]{hyperref}
+\usepackage[capitalize,nameinlink,noabbrev]{cleveref}
+\ifdefined\CombinedStandaloneSupplement
+\externaldocument{monotone_convex}
+\fi
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\setlength{\emergencystretch}{1em}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{assumption}{Assumption}{Assumptions}
+\crefname{definition}{Definition}{Definitions}
+\crefname{algorithm}{Algorithm}{Algorithms}
+\crefname{listing}{Listing}{Listings}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\TV}{TV}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{N}
+\newcommand{\C}{\mathcal C}
+\input{proof_configuration.tex}
+\input{application_numbers.tex}
+\newcommand{\CombinedArticleTitle}{Positive, monotone, and convex Gaussian process regression with Laplacian eigenfunctions}
+\title{\CombinedArticleTitle}
+\author{Andreas Kryger Jensen\\Section of Biostatistics, Department of Public Health\\University of Copenhagen}
+\date{}
+\hypersetup{pdftitle={Positive, monotone, and convex Gaussian process regression with Laplacian eigenfunctions},pdfauthor={Andreas Kryger Jensen}}

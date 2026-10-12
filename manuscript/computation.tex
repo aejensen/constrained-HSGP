@@ -1,0 +1,106 @@
+\section{Posterior computation}\label{sec:computation}
+
+Integrating out $\gamma$ gives a posterior density for the remaining
+coefficients $\boldsymbol g$. We sample from this density and then draw
+$\gamma$ from its conditional truncated normal distribution to recover
+the full coefficient vector. We first form the ordinary
+Gaussian posterior in \cref{eq:gaussian-posterior} and apply the
+appropriate invertible map from
+\cref{cor:positive,cor:monotone,cor:convex}, or the common map in
+\cref{prop:joint}, to its mean and covariance,
+giving the Gaussian laws
+\[
+ \boldsymbol g\mid\boldsymbol y\sim N(\boldsymbol m_g,\boldsymbol V_g),
+ \qquad \gamma\mid\boldsymbol g,\boldsymbol y\sim N(\mu(\boldsymbol g),s^2),
+\]
+where $\mu$ is affine and $s>0$ is constant in $\boldsymbol g$.
+These Gaussian parameters can therefore be prepared before marginal
+sampling, together with an invertible factor
+$\boldsymbol B\boldsymbol B^T=\boldsymbol V_g$ defining the whitened
+coordinates $\boldsymbol g=\boldsymbol m_g+\boldsymbol B\boldsymbol z$,
+in which $\boldsymbol z$ has the standard normal law on $\R^m$ under
+the ordinary posterior. Mapping through $\boldsymbol B$ preserves the
+Gaussian dependence among the remaining coefficients.
+
+At each proposed $\boldsymbol z$, evaluating the marginal density
+requires forming $\boldsymbol g$ and its continuum threshold
+$\tau_r(\boldsymbol g)$. For the individual cases, this means comparing
+both endpoints and all interior stationary candidates from
+\cref{cor:positive,cor:monotone,cor:convex}, or obtaining bounds over
+the entire interval. The Gaussian log-survival term in
+\cref{eq:whitened-target} then weights the standard normal density by
+the conditional probability that $\gamma$ satisfies the sign
+restriction. Since the observation likelihood is already included
+in the ordinary posterior and the overall conditioning probability
+is constant in $\boldsymbol z$, neither requires a separate evaluation
+during marginal sampling. The monotonicity and
+convexity implementations sample this unrestricted $m$-dimensional
+density by Hamiltonian Monte Carlo, with the numerical threshold
+evaluation described below.
+
+For each retained $\boldsymbol g$, we recover the separated coefficient
+by drawing $\gamma$ from
+$N(\mu(\boldsymbol g),s^2)$ truncated to
+$[\tau_r(\boldsymbol g),\infty)$, using an independent
+$U\sim\operatorname{Uniform}(0,1)$
+and the inverse-survival formula in \cref{eq:reconstruction}, which
+retains its conditional uncertainty. Applying the corresponding inverse
+map in \cref{tab:coefficient-reconstruction} then recovers the original
+coefficients of $f_{\boldsymbol a}$.
+With the exact threshold and draws from the
+exact marginal law, these two stages recover the full conditioned
+coefficient law, so evaluating the expansion and its derivatives gives
+joint posterior curves from which to compute means and pointwise
+credible intervals.
+
+For a signed joint restriction satisfying \cref{prop:joint}, the common
+map determines both the Gaussian preparation and every quotient
+$\eta_r(x;\boldsymbol g)$. At each proposed $\boldsymbol g$, we
+evaluate the required continuum and endpoint bounds and take their
+maximum to obtain $\tau_A^\varepsilon(\boldsymbol g)$. Since these
+bounds all concern the same $\gamma$, a single survival probability
+$\Phi^{\mathrm c}((\tau_A^\varepsilon(\boldsymbol g)-\mu(\boldsymbol g))/s)$
+weights the marginal density for the entire intersection.
+Reconstruction uses this joint lower bound in the truncated normal
+and then inverts the common coefficient map. The Gaussian parameters
+must be computed under that map, and the individual thresholds in
+\cref{tab:cases}, which use different maps, cannot be combined
+directly. The supplementary material specifies the HSGP map and
+the continuum and endpoint bounds for each joint combination.
+
+In numerical evaluation, a successful threshold calculation returns an
+enclosure whose upper endpoint $\widetilde\tau_r$ satisfies
+\[
+ \tau_r(\boldsymbol g)\leq\widetilde\tau_r(\boldsymbol g)
+       \leq\tau_r(\boldsymbol g)+\delta
+\]
+for the supplied coefficients and a chosen tolerance $\delta>0$.
+If marginal weighting and conditional reconstruction use the same
+numerical threshold and the enclosure bound holds almost everywhere
+under the ordinary posterior, \cref{prop:error} controls the total
+variation distance between the resulting target distribution and the
+posterior conditioned on the exact sign event.
+The conditional standard deviation $s$ provides a natural scale for
+choosing $\delta$, because $\delta/s$ bounds the error in the
+standardized truncation point. For a prescribed total variation
+error $\rho\in(0,1)$, \cref{prop:error} gives the sufficient choice
+\[
+ \delta\leq\rho\,s\sqrt{2\pi}\,P_{\boldsymbol y}(\mathcal C_r).
+\]
+In practice, a valid positive lower bound on the conditioning
+probability can replace $P_{\boldsymbol y}(\mathcal C_r)$ on the
+right-hand side. Without such a bound, a small value of $\delta/s$
+controls the standardized threshold error but does not by itself
+certify a small posterior error, particularly when the shape event
+is rare.
+
+Stable evaluation uses log-survival and inverse-survival calculations
+to avoid subtracting nearly equal probabilities in the tails. For
+gradient-based sampling, the derivative implementations evaluate
+approximate envelope gradients at numerically selected maximizing
+locations. At a unique maximum these gradients approximate derivatives of the
+exact threshold, while the sampled log values use the rounded upper
+threshold. The supplementary material explains how the numerical
+values and approximate gradients enter the Stan No-U-Turn sampler
+(NUTS), alongside the compact algorithm, Gaussian block formulas,
+threshold enclosures, precision controls, and stable reconstruction.

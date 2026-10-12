@@ -1,0 +1,58 @@
+\begin{theoremEnd}[combined main,category=joint]{proposition}[Joint sign constraints]
+\CombinedResultCheck{prop:joint}{proposition}\label{prop:joint}
+Under the finite Gaussian model in \cref{sec:finite-model}, let
+$\boldsymbol a=(a_0,\ldots,a_m)^T$ denote the coefficient vector and fix
+a nonempty $A\subseteq\{0,1,2\}$ and signs
+$\varepsilon:A\to\{-1,1\}$, with event $\mathcal C_A^\varepsilon$ defined in
+\cref{eq:joint-event}. Suppose an invertible linear change of coordinates
+$\boldsymbol a\mapsto(\boldsymbol g,\gamma)\in\R^m\times\R$
+gives $f_{\boldsymbol a}=f_{\boldsymbol g}+\gamma h$.
+Here $h$ is a fixed function in the retained span, shared by all selected
+orders, $\gamma$ is its scalar coefficient, and $f_{\boldsymbol g}$
+depends linearly on the remaining coordinates $\boldsymbol g$.
+Assume $h,f_{\boldsymbol g}\in C^{\max A}(I)$ with
+$\min_{x\in I}\varepsilon_r\frac{\mathrm{d}^rh}{\mathrm{d}x^r}(x)>0$
+for every $r\in A$. Define
+\begin{equation}\label{eq:joint-threshold}
+ \eta_r(x;\boldsymbol g)=
+       \frac{-\varepsilon_r\frac{\mathrm{d}^rf_{\boldsymbol g}}{\mathrm{d}x^r}(x)}
+            {\varepsilon_r\frac{\mathrm{d}^rh}{\mathrm{d}x^r}(x)},
+ \qquad
+ \tau_A^\varepsilon(\boldsymbol g)=
+       \max_{r\in A}\max_{x\in I}\eta_r(x;\boldsymbol g).
+\end{equation}
+This finite, attained threshold satisfies
+$f_{\boldsymbol a}\in\mathcal C_A^\varepsilon$ exactly when
+$\gamma\geq\tau_A^\varepsilon(\boldsymbol g)$.
+The event has positive ordinary posterior probability and a null
+coefficient boundary. Its marginal density and reconstruction are
+\cref{eq:marginal,eq:reconstruction}, with $\tau_r,\mathcal C_r$
+replaced by $\tau_A^\varepsilon,\mathcal C_A^\varepsilon$ and the
+Gaussian parameters in \cref{eq:conditional} computed under this map.
+The conditioned law satisfies
+$\min_{x\in I}\varepsilon_r\frac{\mathrm{d}^rf_{\boldsymbol a}}{\mathrm{d}x^r}(x)>0$
+almost surely for every $r\in A$. The envelope, strong log-concavity,
+and conservative threshold-error conclusions extend under their
+respective hypotheses.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{prop:joint}
+Fix the coefficient map and signed direction satisfying the hypotheses
+of \cref{prop:joint}.
+Dividing each signed derivative inequality by its positive direction
+derivative gives $\gamma\geq\eta_r(x;\boldsymbol g)$, so their intersection
+gives \cref{eq:joint-threshold}. Compactness of $I$, finiteness
+of $A$, and the denominator bounds make the maximum finite and attained.
+The Gaussian conditioning argument in the proof of \cref{thm:finite} then gives
+positive probability, the marginal density, and reconstruction.
+
+Above the threshold, every selected signed derivative has a strictly
+positive minimum. At equality, an attained maximizing pair gives a zero
+derivative, and perturbing $\gamma$ crosses the event boundary. Thus the
+boundary is the threshold graph, which has zero conditional Gaussian
+probability for every $\boldsymbol g$, establishing almost-sure strictness. Each
+$\eta_r(x;\boldsymbol g)$ is linear in $\boldsymbol g$, so the envelope
+and strong log-concavity arguments apply with the compact index set
+$A\times I$, and \cref{prop:error} applies to the same scalar truncation.
+\end{proofEnd}

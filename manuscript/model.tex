@@ -1,0 +1,92 @@
+\label{sec:model}
+
+The Hilbert space Gaussian process (HSGP) construction of
+\citet{solin2020hsgp} approximates a stationary GP by a finite
+expansion in Laplacian eigenfunctions with Gaussian coefficients.
+The domain determines the basis functions, while the covariance
+kernel determines the coefficient variances. Changing the kernel or
+its parameters therefore leaves the basis and its derivatives
+unchanged, allowing their values at observation and prediction
+locations to be computed once and reused
+\citep{riutort2023practicalhsgp}. For shape-constrained regression,
+a further advantage is that the response, slope, and curvature are
+linear functions of the same coefficients. We can therefore express
+all three restrictions in a common coefficient space and obtain
+their conditioned laws from the ordinary Gaussian regression posterior.
+
+\input{theory/finite_model.tex}
+
+Under this prior, the covariance is
+\[
+ \Cov(f_{\boldsymbol a}(x),f_{\boldsymbol a}(x'))
+ =\sigma_0^2+\sum_{j=1}^m S_k(\omega_j)
+                         \phi_{j,L}(x)\phi_{j,L}(x').
+\]
+The sum approximates the stationary covariance $k(x-x')$, while
+$\sigma_0^2$ is the contribution of the random intercept. Because
+the eigenfunctions vanish at the padded endpoints, the finite
+covariance is generally nonstationary. Defining the basis on an
+interval larger than $I$ places this artificial boundary outside
+the region of inference without requiring the response to vanish
+at the endpoints of $I$. The intercept permits uncertainty in the
+overall response level without changing slope or curvature.
+
+\input{theory/finite_observations.tex}
+
+Write $\boldsymbol a=(a_0,\ldots,a_m)^T$. If $\boldsymbol X$ has rows
+$(1,\phi_{1,L}(x_i),\ldots,\phi_{m,L}(x_i))$, set
+$\boldsymbol m_0=(\mu_0,0,\ldots,0)^T$ and
+$\boldsymbol V_0=\operatorname{diag}(\sigma_0^2,S_k(\omega_1),\ldots,S_k(\omega_m))$.
+The coefficients and observations then have the joint Gaussian distribution
+\[
+ \begin{pmatrix}\boldsymbol a\\\boldsymbol Y\end{pmatrix}
+ \sim N\left(
+ \begin{pmatrix}\boldsymbol m_0\\\boldsymbol X\boldsymbol m_0\end{pmatrix},
+ \begin{pmatrix}
+  \boldsymbol V_0 & \boldsymbol V_0\boldsymbol X^T\\
+  \boldsymbol X\boldsymbol V_0 &
+  \boldsymbol X\boldsymbol V_0\boldsymbol X^T+\boldsymbol\Sigma
+ \end{pmatrix}
+ \right).
+\]
+Here $\boldsymbol\Sigma$ is the noise covariance, while
+$\boldsymbol X\boldsymbol V_0\boldsymbol X^T+\boldsymbol\Sigma$
+is the marginal covariance of the observations. Conditioning this joint
+distribution on $\boldsymbol Y=\boldsymbol y$ gives the ordinary Gaussian posterior
+\begin{equation}\label{eq:gaussian-posterior}
+ \begin{aligned}
+ \boldsymbol a\mid\boldsymbol y&\sim N(\boldsymbol m,\boldsymbol V),\\
+ \boldsymbol m&=\boldsymbol m_0+\boldsymbol V_0\boldsymbol X^T
+       (\boldsymbol X\boldsymbol V_0\boldsymbol X^T+\boldsymbol\Sigma)^{-1}
+       (\boldsymbol y-\boldsymbol X\boldsymbol m_0),\\
+ \boldsymbol V&=\boldsymbol V_0-\boldsymbol V_0\boldsymbol X^T
+       (\boldsymbol X\boldsymbol V_0\boldsymbol X^T+\boldsymbol\Sigma)^{-1}
+       \boldsymbol X\boldsymbol V_0.
+ \end{aligned}
+\end{equation}
+These equations specify the Gaussian law that we
+will condition on shape, with factorizations and linear solves used
+in its numerical preparation.
+
+We treat positivity, monotonicity, and convexity as sign restrictions
+of orders zero, one, and two. Write $C^0(I)=C(I)$ and
+$\frac{\mathrm{d}^0f}{\mathrm{d}x^0}=f$. For $r\in\{0,1,2\}$ we condition the ordinary
+posterior on the function-space event
+\begin{equation}\label{eq:shape-event}
+ \mathcal C_r=\left\{f\in C^r(I):
+                 \min_{x\in I}\frac{\mathrm{d}^rf}{\mathrm{d}x^r}(x)\geq0\right\}.
+\end{equation}
+The zero order gives a nonnegative response, the first gives
+nondecreasing regression, and the second gives convex regression, with
+$\mathcal C_r$ also denoting its explicitly identified preimage in
+coefficient space. The restriction requires nonnegativity but does
+not impose a fixed positive lower bound on the response, slope, or
+curvature.
+
+Shape information can equivalently be incorporated into the prior.
+Provided that $\mathcal C_r$ has positive prior probability, we may
+restrict the Gaussian prior to curves in $\mathcal C_r$ and then update
+it using the observation likelihood. This gives the same posterior as
+first performing ordinary Gaussian updating and then conditioning on
+$\mathcal C_r$, because the prior normalizing constant cancels in
+Bayes' formula.

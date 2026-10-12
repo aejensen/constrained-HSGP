@@ -1,0 +1,104 @@
+\begingroup
+\small
+\setlength{\tabcolsep}{3pt}
+\setlength{\LTcapwidth}{\textwidth}
+\begin{longtable}{@{}llll@{}}
+\caption{Implementing the 20 joint combinations without opposing
+constraints under \cref{cor:combinations}.
+P and N denote nonnegativity and nonpositivity, I and D denote
+nondecreasing and nonincreasing curves, and CX and CV denote convexity
+and concavity. Choose fixed direction coefficients $\boldsymbol d$
+so that every signed profile in the second column is strictly positive
+throughout $J$. For a pivot $d_{j_*}\ne0$, use
+$\gamma=a_{j_*}/d_{j_*}$ and $g_j=a_j-d_j\gamma$, so that
+$g_{j_*}=0$ and $a_j=g_j+d_j\gamma$ for $0\leq j\leq m$.
+Every displayed coefficient bound in a row must hold, giving
+$\gamma\geq\tau_A^\varepsilon(\boldsymbol g)$ by taking the largest
+displayed right-hand side. With arguments $\boldsymbol g$ suppressed,
+$M_r=\max_{x\in I}\eta_r(x;\boldsymbol g)$ requires an interval maximum,
+evaluated at the endpoint and stationary candidates in
+\cref{cor:combinations}, whereas
+$\eta_r^\pm=\eta_r(x_\pm;\boldsymbol g)$ requires only evaluation
+at the left endpoint $x_-$ or right endpoint $x_+$.
+All ratios
+$\eta_r(x;\boldsymbol g)=-H_{r,\boldsymbol g}(w(x))/H_{r,\boldsymbol d}(w(x))$
+use the same direction and coefficient map within a row.
+A dash indicates no separate endpoint bound.}
+\label{tab:constraint-combinations}\\
+\toprule
+Combination & Direction condition on $J$ & Continuum bound & Endpoint bound\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\tablename\ \thetable\ (continued)}\\
+\toprule
+Combination & Direction condition on $J$ & Continuum bound & Endpoint bound\\
+\midrule
+\endhead
+\midrule
+\multicolumn{4}{r@{}}{Continued on the next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{4}{@{}l}{\textit{Pairs of constraints}}\\*
+P, I & $H_{0,\boldsymbol d},H_{1,\boldsymbol d} >0$ &
+  $\gamma\geq M_1$ & $\gamma\geq\eta_0^-$\\
+\addlinespace[3pt]
+P, D & $H_{0,\boldsymbol d},-H_{1,\boldsymbol d} >0$ &
+  $\gamma\geq M_1$ & $\gamma\geq\eta_0^+$\\
+\addlinespace[3pt]
+N, I & $-H_{0,\boldsymbol d},H_{1,\boldsymbol d} >0$ &
+  $\gamma\geq M_1$ & $\gamma\geq\eta_0^+$\\
+\addlinespace[3pt]
+N, D & $-H_{0,\boldsymbol d},-H_{1,\boldsymbol d} >0$ &
+  $\gamma\geq M_1$ & $\gamma\geq\eta_0^-$\\
+\addlinespace[3pt]
+P, CX & $H_{0,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq\max\{M_2,M_0\}$ & ---\\
+\addlinespace[3pt]
+P, CV & $H_{0,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_0^-,\eta_0^+\}$\\
+\addlinespace[3pt]
+N, CX & $-H_{0,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_0^-,\eta_0^+\}$\\
+\addlinespace[3pt]
+N, CV & $-H_{0,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq\max\{M_2,M_0\}$ & ---\\
+\addlinespace[3pt]
+I, CX & $H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\eta_1^-$\\
+\addlinespace[3pt]
+I, CV & $H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\eta_1^+$\\
+\addlinespace[3pt]
+D, CX & $-H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\eta_1^+$\\
+\addlinespace[3pt]
+D, CV & $-H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\eta_1^-$\\
+\addlinespace
+\multicolumn{4}{@{}l}{\textit{Triples of constraints}}\\*
+P, I, CX & $H_{0,\boldsymbol d},H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^-,\eta_0^-\}$\\
+\addlinespace[3pt]
+P, I, CV & $H_{0,\boldsymbol d},H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^+,\eta_0^-\}$\\
+\addlinespace[3pt]
+P, D, CX & $H_{0,\boldsymbol d},-H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^+,\eta_0^+\}$\\
+\addlinespace[3pt]
+P, D, CV & $H_{0,\boldsymbol d},-H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^-,\eta_0^+\}$\\
+\addlinespace[3pt]
+N, I, CX & $-H_{0,\boldsymbol d},H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^-,\eta_0^+\}$\\
+\addlinespace[3pt]
+N, I, CV & $-H_{0,\boldsymbol d},H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^+,\eta_0^+\}$\\
+\addlinespace[3pt]
+N, D, CX & $-H_{0,\boldsymbol d},-H_{1,\boldsymbol d},H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^+,\eta_0^-\}$\\
+\addlinespace[3pt]
+N, D, CV & $-H_{0,\boldsymbol d},-H_{1,\boldsymbol d},-H_{2,\boldsymbol d} >0$ &
+  $\gamma\geq M_2$ & $\gamma\geq\max\{\eta_1^-,\eta_0^-\}$\\
+\end{longtable}
+\endgroup

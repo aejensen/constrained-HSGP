@@ -1,0 +1,44 @@
+\maketitle
+\def\CombinedProofZone{main}
+\begin{abstract}
+We develop a common construction for imposing positivity, monotonicity,
+or convexity throughout an interval in Hilbert space Gaussian process
+regression. The model represents the process as a finite sum of basis
+functions with Gaussian coefficients whose variances are given by the
+kernel's spectral density. We retain this representation and express
+each restriction as a threshold on one coefficient. Integrating out
+this coefficient gives a strongly log-concave marginal posterior with
+a normal survival weight, and conditional truncated normal sampling
+recovers the full constrained law. We characterize the thresholds
+through polynomial equations and bound posterior error from conservative
+numerical evaluation in total variation. Under spectral regularity,
+these posteriors converge in quadratic Wasserstein distance to the
+corresponding underlying posteriors as the computational interval
+expands and higher frequencies are retained, controlling uniform
+discrepancies in the response and derivatives through the constrained
+order. Mercury lidar and leaf light-response applications illustrate
+the consequences for derivative inference.
+\end{abstract}
+\noindent\textit{Keywords:} Bayesian regression, continuum constraint,
+derivative inference, Gaussian process, Hilbert space approximation
+\input{introduction.tex}
+\section{Methods}\label{sec:methodology}
+\input{model.tex}
+\input{methods.tex}
+\input{theory.tex}
+\input{computation.tex}
+\FloatBarrier
+\section{Applications}\label{sec:applications}
+We compare ordinary Gaussian and shape-constrained posteriors in two
+applications where derivatives have direct scientific interpretations.
+Monotonicity ensures nonnegative mercury concentration in a lidar model,
+while concavity represents a nonincreasing marginal gain in leaf carbon
+assimilation.
+
+\input{application_lidar.tex}
+\FloatBarrier
+\input{application_leaf.tex}
+\FloatBarrier
+\input{discussion.tex}
+\bibliographystyle{plainnat}
+\bibliography{references}

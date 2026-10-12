@@ -1,0 +1,8 @@
+\renewcommand*{\theHequation}{\arabic{equation}}
+\ifdefined\CombinedInlineProofs
+\pgfkeys{/prAtEnd/combined main/.style={normal}}
+\else
+\pgfkeys{/prAtEnd/combined main/.style={end,restate,no link to proof}}
+\fi
+\newcommand{\CombinedResultCheck}[2]{}
+\newcommand{\CombinedProofCheck}[1]{}

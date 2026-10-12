@@ -1,0 +1,170 @@
+\begin{theoremEnd}[combined main,category=positive]{corollary}[Positivity in the Laplacian expansion]
+\CombinedResultCheck{cor:positive}{corollary}\label{cor:positive}
+Under the finite Gaussian model in \cref{sec:finite-model}, suppose
+$m\geq1$ and $I\subset(c-L,c+L)$. Set
+$h_0=1$, $\boldsymbol g=(a_1,\ldots,a_m)^T$, and
+$f_{\boldsymbol g}=\sum_{j=1}^ma_j\phi_{j,L}$.
+Then $f_{\boldsymbol a}=f_{\boldsymbol g}+a_0h_0$, with inverse
+obtained by reinserting $a_0$.
+
+For $\theta(x)=\omega_1(x-c+L)$, $w(x)=\cos\theta(x)$, and
+$J=[w(x_+),w(x_-)]\subset(-1,1)$, define
+$P_{0,\boldsymbol g}(w)=\sum_{j=1}^mja_jT_j(w)$. The threshold is
+\begin{equation}\label{eq:positive-threshold}
+ \tau_0(\boldsymbol g)=-\min_{x\in I}f_{\boldsymbol g}(x).
+\end{equation}
+\cref{thm:finite} applies with scalar coefficient $\gamma=a_0$.
+
+The threshold is attained at a physical endpoint or a location whose
+cosine coordinate is an interior real root in $J$ of
+$P_{0,\boldsymbol g}$. This stationary polynomial has degree at most
+$m$ when nonzero. All root multiplicities and reduced degrees are
+included. If the stationary polynomial vanishes identically, the
+curve $f_{\boldsymbol g}$ is constant and either endpoint suffices.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{cor:positive}
+Use the finite Gaussian model in \cref{sec:finite-model} and its compact
+physical interval. Separating the intercept is an invertible permutation
+of the coefficients, with $\min_Ih_0=1$, so \cref{thm:finite} at
+order zero gives \cref{eq:positive-threshold} and the conditioned law.
+To locate the minimum over the whole interval, use the Chebyshev
+identities to write
+\[
+ f_{\boldsymbol g}(x)=\frac{\sqrt{1-w(x)^2}}{\sqrt L}
+             \sum_{j=1}^ma_jU_{j-1}(w(x)),
+ \qquad
+ \frac{\mathrm{d}f_{\boldsymbol g}}{\mathrm{d}x}(x)=
+             \frac{\omega_1}{\sqrt L}P_{0,\boldsymbol g}(w(x)).
+\]
+Because the cosine is strictly decreasing for $0<\theta(x)<\pi$,
+interior stationary locations correspond exactly to interior roots of
+the displayed polynomial. The extreme value theorem and Fermat's
+theorem therefore give the endpoint and stationary candidates, with
+finitely many distinct roots, including repeated roots, when the
+polynomial is nonzero and has degree at most $m$. If it vanishes
+identically, the derivative is zero throughout $I$, so the mean value
+theorem gives constancy. Although the intercept is
+independent of the spectral coefficients in the prior, reconstruction
+uses its conditional posterior given $\boldsymbol g$ and the data.
+\end{proofEnd}
+
+\begin{theoremEnd}[combined main,category=monotone]{corollary}[Monotonicity in the Laplacian expansion]
+\CombinedResultCheck{cor:monotone}{corollary}\label{cor:monotone}
+Under the finite Gaussian model in \cref{sec:finite-model}, suppose
+$m\geq4$ and $I\subset[c-L/2,c+L/2]$. Set
+$h_1=-\phi_{2,L}-\phi_{4,L}/4$,
+$\boldsymbol g=(g_0,g_1,g_3,\ldots,g_m)^T$, and
+$f_{\boldsymbol g}=g_0+\sum_{j=1}^mg_j\phi_{j,L}$, where
+$g_2=0$, $g_4=a_4-a_2/4$, and $g_j=a_j$ for $j\notin\{2,4\}$.
+Then $f_{\boldsymbol a}=f_{\boldsymbol g}+(-a_2)h_1$, with inverse
+obtained by reinserting $a_2$ and setting $a_4=g_4+a_2/4$.
+
+For $\theta(x)=\omega_1(x-c+L)$, $w(x)=\cos\theta(x)$, and
+$J=[w(x_+),w(x_-)]\subset[-1/\sqrt2,1/\sqrt2]$, define
+\begin{equation}\label{eq:monotone-polynomials}
+ P_{\boldsymbol g}(w)=\sum_{\substack{1\leq j\leq m\\j\ne2}}jg_jT_j(w),
+ \qquad D(w)=1+4w^2-8w^4.
+\end{equation}
+Since $D\geq1$ on $J$, the threshold is
+\begin{equation}\label{eq:monotone-threshold}
+ \tau_1(\boldsymbol g)=\max_{w\in J}\frac{-P_{\boldsymbol g}(w)}{D(w)}.
+\end{equation}
+\cref{thm:finite} applies with scalar coefficient $\gamma=-a_2$.
+
+The threshold is attained at a physical endpoint or a location whose
+cosine coordinate is an interior real root in $J$ of
+$\frac{\mathrm{d}P_{\boldsymbol g}}{\mathrm{d}w}D-P_{\boldsymbol g}\frac{\mathrm{d}D}{\mathrm{d}w}$.
+This stationary polynomial has degree at most $m+3$ when nonzero.
+All root multiplicities and reduced degrees are included. If the
+stationary polynomial vanishes identically, the quotient
+$-P_{\boldsymbol g}/D$ is constant and either endpoint suffices.
+A nonzero constant stationary polynomial gives only endpoint candidates.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{cor:monotone}
+Use the finite Gaussian model in \cref{sec:finite-model} with the rank and closed padding interval in
+\cref{cor:monotone}. Substitution of the inverse map proves the curve
+identity and invertibility, while the identity
+$T_j(w(x))=\cos(j\theta(x))$ gives the derivative formulas
+\[
+ \frac{\mathrm{d}f_{\boldsymbol g}}{\mathrm{d}x}(x)=\frac{\omega_1}{\sqrt L}P_{\boldsymbol g}(w(x)),
+ \qquad \frac{\mathrm{d}h_1}{\mathrm{d}x}(x)=\frac{\omega_1}{\sqrt L}D(w(x)).
+\]
+The assumed padding confines $\theta(x)$ to $[\pi/4,3\pi/4]$, where
+the cosine is strictly decreasing and
+$D(w)=1+4w^2(1-2w^2)\geq1$, including at the physical endpoints.
+The positive derivative bound therefore allows \cref{thm:finite}
+to supply the conditioned law and strictness.
+Because the map transports the original Gaussian covariance,
+$g_4$ and $a_2$ retain their induced dependence.
+
+Since $D>0$ on compact $J$, the extreme value theorem and Fermat's
+theorem locate the maximum of $-P_{\boldsymbol g}/D$ at an endpoint
+or an interior stationary point. The quotient rule gives the
+stationary polynomial in the statement, whose degree is at most
+$m+3$ because $P_{\boldsymbol g}$ and $D$ have degrees at most
+$m$ and $4$. If this polynomial vanishes identically, the quotient
+is constant by the mean value theorem and either endpoint suffices.
+Otherwise it has finitely many distinct roots, each a candidate
+when it lies in the interior of $J$, regardless of multiplicity.
+This also covers reduced degrees, including a nonzero constant
+stationary polynomial with no interior candidates.
+\end{proofEnd}
+
+\begin{theoremEnd}[combined main,category=convex]{corollary}[Convexity in the Laplacian expansion]
+\CombinedResultCheck{cor:convex}{corollary}\label{cor:convex}
+Under the finite Gaussian model in \cref{sec:finite-model}, suppose
+$m\geq2$ and $I\subset(c-L,c+L)$. Set $h_2=-\phi_{1,L}$,
+$\boldsymbol g=(a_0,a_2,\ldots,a_m)^T$, and
+$f_{\boldsymbol g}=a_0+\sum_{j=2}^ma_j\phi_{j,L}$.
+Then $f_{\boldsymbol a}=f_{\boldsymbol g}+(-a_1)h_2$, with inverse
+obtained by reinserting $a_1$.
+
+For $\theta(x)=\omega_1(x-c+L)$, $w(x)=\cos\theta(x)$, and
+$J=[w(x_+),w(x_-)]\subset(-1,1)$, define the polynomial and threshold
+\begin{equation}\label{eq:convex-threshold}
+ Q_{\boldsymbol g}(w)=\sum_{j=2}^mj^2a_jU_{j-1}(w),
+ \qquad \tau_2(\boldsymbol g)=\max_{w\in J}Q_{\boldsymbol g}(w).
+\end{equation}
+\cref{thm:finite} applies with scalar coefficient $\gamma=-a_1$.
+
+The threshold is attained at a physical endpoint or a location whose
+cosine coordinate is an interior real root in $J$ of
+$\frac{\mathrm{d}Q_{\boldsymbol g}}{\mathrm{d}w}$. The polynomial $Q_{\boldsymbol g}$
+has degree at most $m-1$, so its stationary polynomial has degree at
+most $m-2$ when nonzero. All root multiplicities and reduced degrees
+are included. If the stationary polynomial vanishes identically,
+$Q_{\boldsymbol g}$ is constant and either endpoint suffices.
+A nonzero constant stationary polynomial gives only endpoint candidates.
+\end{theoremEnd}
+
+\begin{proofEnd}
+\CombinedProofCheck{cor:convex}
+Use the finite Gaussian model in \cref{sec:finite-model} with the rank and open padding interval in
+\cref{cor:convex}. The coordinate map is an invertible signed
+permutation. Since $0<\theta(x)<\pi$ on compact $I$,
+\[
+ \frac{\mathrm{d}^2h_2}{\mathrm{d}x^2}(x)=\frac{\omega_1^2}{\sqrt L}\sin\theta(x)>0,
+ \qquad
+ \frac{\mathrm{d}^2f_{\boldsymbol g}}{\mathrm{d}x^2}(x)=
+ -\frac{\omega_1^2}{\sqrt L}\sin\theta(x)\,Q_{\boldsymbol g}(w(x)).
+\]
+The second formula uses
+$\sin(j\theta(x))=\sin\theta(x)\,U_{j-1}(w(x))$, while compactness
+keeps the positive curvature in the first formula bounded away from
+zero. Thus \cref{thm:finite} gives the claimed threshold and posterior
+under the stated open padding condition.
+
+The extreme value theorem and Fermat's theorem locate the maximum
+of $Q_{\boldsymbol g}$ at an endpoint or an interior zero of
+$\frac{\mathrm{d}Q_{\boldsymbol g}}{\mathrm{d}w}$. The degree of $Q_{\boldsymbol g}$
+is at most $m-1$, so this derivative has degree at most $m-2$ when
+nonzero. If it vanishes identically, $Q_{\boldsymbol g}$ is constant
+and either endpoint suffices. Otherwise its finitely many distinct
+interior roots enter the candidate set regardless of multiplicity,
+with none when the derivative is a nonzero constant. The same
+argument covers every reduced degree.
+\end{proofEnd}
