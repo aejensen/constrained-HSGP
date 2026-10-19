@@ -2,13 +2,18 @@
 
 This paper develops a common conditioning construction for positivity,
 monotonicity, and convexity in the Laplacian eigenfunction expansion.
-Its contribution is to express these whole-interval events within
-the HSGP model using its existing basis and kernel-derived Gaussian
-prior, including joint restrictions when a suitable common direction
-is available. The resulting representation supports joint inference
-for the curve and its derivatives and separates the definition of
-the conditioned posterior from the numerical evaluation of its
-threshold.
+The conditioning events themselves are established in constrained GP
+regression. Their representation here is specific to the HSGP model:
+it uses the existing oscillatory basis and kernel-derived Gaussian
+prior to express each whole-interval event through one coefficient,
+including joint restrictions when a suitable common direction is
+available. This differs from conditioning at selected locations
+\citep{daveiga2012inequality,daveiga2020linear} and from choosing a
+basis whose coefficient inequalities directly ensure shape
+\citep{maatouk2017constraints,lopera2018finite}. The representation
+supports joint inference for the curve and its derivatives and
+separates the definition of the conditioned posterior from the
+numerical evaluation of its threshold.
 
 The approximation theory connects this finite construction to
 conditioning the underlying GP. For the individual constraints,

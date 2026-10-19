@@ -1,23 +1,26 @@
 \maketitle
 \def\CombinedProofZone{main}
 \begin{abstract}
-We develop a common construction for imposing positivity, monotonicity,
-or convexity throughout an interval in Hilbert space Gaussian process
-regression. The model represents the process as a finite sum of basis
-functions with Gaussian coefficients whose variances are given by the
-kernel's spectral density. We retain this representation and express
-each restriction as a threshold on one coefficient. Integrating out
-this coefficient gives a strongly log-concave marginal posterior with
-a normal survival weight, and conditional truncated normal sampling
-recovers the full constrained law. We characterize the thresholds
-through polynomial equations and bound posterior error from conservative
-numerical evaluation in total variation. Under spectral regularity,
-these posteriors converge in quadratic Wasserstein distance to the
-corresponding underlying posteriors as the computational interval
-expands and higher frequencies are retained, controlling uniform
-discrepancies in the response and derivatives through the constrained
-order. Mercury lidar and leaf light-response applications illustrate
-the consequences for derivative inference.
+We study how to condition an existing Hilbert space Gaussian process
+(HSGP) expansion on positivity, monotonicity, or convexity throughout
+an interval. The expansion has Gaussian coefficients whose variances
+are given by the kernel's spectral density. At fixed covariance and
+noise parameters, we retain this coefficient law and represent each
+complete interval event as a threshold on one coefficient. Integrating
+out that coefficient gives a strongly log-concave marginal posterior
+with a normal survival weight, while conditional truncated normal
+sampling recovers the full constrained law. The construction also
+covers joint restrictions within the finite expansion. For individual
+restrictions, we characterize the thresholds through polynomial
+equations and bound posterior error from conservative numerical
+evaluation in total variation. Under spectral regularity, the
+conditioned finite posteriors converge in quadratic Wasserstein
+distance to the corresponding conditioned underlying GP posteriors as
+the computational interval expands and higher frequencies are
+retained. This convergence controls uniform discrepancies in the
+response and derivatives through the constrained order. Mercury lidar
+and leaf light-response applications illustrate the consequences for
+derivative inference.
 \end{abstract}
 \noindent\textit{Keywords:} Bayesian regression, continuum constraint,
 derivative inference, Gaussian process, Hilbert space approximation
