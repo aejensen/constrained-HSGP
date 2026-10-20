@@ -7,7 +7,9 @@
 \usepackage[round,authoryear]{natbib}
 \usepackage[commandRef=cref]{proof-at-the-end}
 \usepackage{xr-hyper}
-\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\definecolor{ManuscriptLink}{HTML}{145A86}
+\usepackage[colorlinks=true,linkcolor=ManuscriptLink,citecolor=ManuscriptLink,urlcolor=ManuscriptLink]{hyperref}
 \usepackage[capitalize,nameinlink,noabbrev]{cleveref}
 \ifdefined\CombinedStandaloneSupplement
 \externaldocument{monotone_convex}
@@ -44,6 +46,6 @@
 \input{application_numbers.tex}
 \newcommand{\CombinedArticleTitle}{Positive, monotone, and convex Gaussian process regression with Laplacian eigenfunctions}
 \title{\CombinedArticleTitle}
-\author{Andreas Kryger Jensen\\Section of Biostatistics, Department of Public Health\\University of Copenhagen}
+\author{Andreas Kryger Jensen\thanks{Corresponding author: Andreas Kryger Jensen, PhD, Associate Professor. Section of Biostatistics, Department of Public Health, Faculty of Health Sciences, University of Copenhagen, {\O}ster Farimagsgade 5, Building 10, 1353 Copenhagen K, Denmark. Email: \href{mailto:aeje@sund.ku.dk}{aeje@sund.ku.dk}. Telephone: +45 35 33 35 28. ORCID: \href{https://orcid.org/0000-0002-8233-9176}{0000-0002-8233-9176}.}\\Section of Biostatistics, Department of Public Health\\University of Copenhagen}
 \date{}
 \hypersetup{pdftitle={Positive, monotone, and convex Gaussian process regression with Laplacian eigenfunctions},pdfauthor={Andreas Kryger Jensen}}
